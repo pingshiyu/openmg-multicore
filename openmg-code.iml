@@ -53,5 +53,27 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/ejml-v0.38-libs/ejml-ddense-0.38.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" exported="">
+      <library>
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/lib/ejml-v0.38-libs" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="file://$MODULE_DIR$/lib/ejml-v0.38-libs" />
+        </SOURCES>
+        <jarDirectory url="file://$MODULE_DIR$/lib/ejml-v0.38-libs" recursive="false" />
+        <jarDirectory url="file://$MODULE_DIR$/lib/ejml-v0.38-libs" recursive="false" type="SOURCES" />
+      </library>
+    </orderEntry>
   </component>
 </module>

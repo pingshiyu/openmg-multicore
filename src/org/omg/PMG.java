@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -31,6 +32,8 @@ public class PMG{
 	static int executorCount=0;
 	static boolean wFile = false;
 	static String formula = null;
+	static int[] neighbourhood = null;
+	static boolean restrictNeighbourhoods = false;
 	static int method = MolProcessor.OPTIMAL;
 	static boolean hashMap = false;
 	static boolean cdk = true;
@@ -59,7 +62,9 @@ public class PMG{
 		long before = System.currentTimeMillis();
 		ArrayList<String> atomSymbols = Util.parseFormula(formula);
 		if (atomSymbols == null) System.exit(1);	// exit if it failed to parse the formula
-		mp = new MolProcessor(atomSymbols, formula, method, (method==MolProcessor.SEM_CAN) && hashMap, cdk, checkBad, fragFile != null, goodlist, badlist);
+		if (restrictNeighbourhoods)
+        	System.out.println("Neighbourhood restriction defined as: " + Arrays.toString(neighbourhood));
+		mp = new MolProcessor(atomSymbols, formula, neighbourhood, restrictNeighbourhoods, method, (method==MolProcessor.SEM_CAN) && hashMap, cdk, checkBad, fragFile != null, goodlist, badlist);
 		if (fragFile != null) mp.useFragment(fragFile);
 		executor = new ThreadPoolExecutor(executorCount, executorCount, 0L, TimeUnit.MILLISECONDS, taskQueue);
 		pendingTasks.getAndIncrement();
@@ -104,6 +109,17 @@ public class PMG{
 					out = args[++i];
 					wFile = true;
 				}
+				else if(args[i].equals("-neighbourhood")) {
+				    // Expected string: comma separated list of integers representing data for the neighbourhood constraint
+                    // function. neighbourhood[i] == max. no of neighbours within distance i. neighbourhood[0] = 1.
+				    String neighbourhoodStr = args[++i];
+				    String[] neighbourhoodValues = neighbourhoodStr.split(",");
+				    neighbourhood = new int[neighbourhoodValues.length];
+				    for(int j = 0; j<neighbourhoodValues.length; j++) {
+				        neighbourhood[j] = Integer.parseInt(neighbourhoodValues[j]);
+                    }
+				    restrictNeighbourhoods = true;
+                }
 				else if(args[i].equals("-v")){
 					verbose = true;
 				}

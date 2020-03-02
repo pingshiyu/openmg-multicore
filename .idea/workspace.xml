@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d373af43-beb6-4a62-8a33-199c3cbaf58c" name="Default Changelist" comment="" />
+    <list default="true" id="d373af43-beb6-4a62-8a33-199c3cbaf58c" name="Default Changelist" comment="commented code">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/molecules/C6H6.sdf" beforeDir="false" afterPath="$PROJECT_DIR$/molecules/C6H6.sdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/openmg-code.iml" beforeDir="false" afterPath="$PROJECT_DIR$/openmg-code.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/omg/MolProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/omg/MolProcessor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/omg/PMG.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/omg/PMG.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/omg/tools/Util.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/omg/tools/Util.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -18,8 +25,15 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="Downloaded.Files.Path.Enabled" value="false" />
+    <property name="Repository.Attach.Annotations" value="false" />
+    <property name="Repository.Attach.JavaDocs" value="false" />
+    <property name="Repository.Attach.Sources" value="false" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/lib/ejml-v0.38-libs" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2" />
   </component>
   <component name="RunManager">
     <configuration name="PMG" type="Application" factoryName="Application" nameIsGenerated="true">
@@ -27,7 +41,7 @@
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="org.omg.PMG" />
       <module name="openmg-code" />
-      <option name="PROGRAM_PARAMETERS" value="C6H6 -m 2 -o ./molecules/C6H6.sdf" />
+      <option name="PROGRAM_PARAMETERS" value="C6H6 -neighbourhood 1,5,16,30 -o ./molecules/C6H6.sdf" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -52,11 +66,15 @@
     </task>
     <servers />
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="commented code" />
+    <option name="LAST_COMMIT_MESSAGE" value="commented code" />
+  </component>
   <component name="WindowStateProjectService">
-    <state x="339" y="266" width="1084" height="784" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1583013904300">
+    <state x="339" y="228" width="1084" height="784" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1583108293021">
       <screen x="70" y="27" width="1610" height="1023" />
     </state>
-    <state x="339" y="266" width="1084" height="784" key="#com.intellij.execution.impl.EditConfigurationsDialog/70.27.1610.1023@70.27.1610.1023" timestamp="1583013904300" />
+    <state x="339" y="228" width="1084" height="784" key="#com.intellij.execution.impl.EditConfigurationsDialog/70.27.1610.1023@70.27.1610.1023" timestamp="1583108293021" />
     <state x="685" y="249" width="424" height="591" key="#com.intellij.ide.macro.MacrosDialog" timestamp="1582682884056">
       <screen x="70" y="27" width="1610" height="1023" />
     </state>
@@ -65,29 +83,49 @@
       <screen x="70" y="27" width="1610" height="1023" />
     </state>
     <state x="607" y="374" width="525" height="435" key="#com.intellij.ide.util.TreeClassChooserDialog/70.27.1610.1023@70.27.1610.1023" timestamp="1582682810620" />
-    <state x="658" y="296" width="424" height="491" key="FileChooserDialogImpl" timestamp="1582676495866">
+    <state x="421" y="82" width="897" height="919" key="CommitChangelistDialog2" timestamp="1583021576236">
       <screen x="70" y="27" width="1610" height="1023" />
     </state>
-    <state x="658" y="296" width="424" height="491" key="FileChooserDialogImpl/70.27.1610.1023@70.27.1610.1023" timestamp="1582676495866" />
-    <state width="1564" height="266" key="GridCell.Tab.0.bottom" timestamp="1583013910283">
+    <state x="421" y="82" width="897" height="919" key="CommitChangelistDialog2/70.27.1610.1023@70.27.1610.1023" timestamp="1583021576236" />
+    <state x="658" y="296" width="424" height="491" key="FileChooserDialogImpl" timestamp="1583102099001">
       <screen x="70" y="27" width="1610" height="1023" />
     </state>
-    <state width="1564" height="266" key="GridCell.Tab.0.bottom/70.27.1610.1023@70.27.1610.1023" timestamp="1583013910283" />
-    <state width="1564" height="266" key="GridCell.Tab.0.center" timestamp="1583013910281">
+    <state x="658" y="296" width="424" height="491" key="FileChooserDialogImpl/70.27.1610.1023@70.27.1610.1023" timestamp="1583102099001" />
+    <state width="1564" height="266" key="GridCell.Tab.0.bottom" timestamp="1583108284349">
       <screen x="70" y="27" width="1610" height="1023" />
     </state>
-    <state width="1564" height="266" key="GridCell.Tab.0.center/70.27.1610.1023@70.27.1610.1023" timestamp="1583013910281" />
-    <state width="1564" height="266" key="GridCell.Tab.0.left" timestamp="1583013910279">
+    <state width="1564" height="266" key="GridCell.Tab.0.bottom/70.27.1610.1023@70.27.1610.1023" timestamp="1583108284349" />
+    <state width="1564" height="266" key="GridCell.Tab.0.center" timestamp="1583108284348">
       <screen x="70" y="27" width="1610" height="1023" />
     </state>
-    <state width="1564" height="266" key="GridCell.Tab.0.left/70.27.1610.1023@70.27.1610.1023" timestamp="1583013910279" />
-    <state width="1564" height="266" key="GridCell.Tab.0.right" timestamp="1583013910282">
+    <state width="1564" height="266" key="GridCell.Tab.0.center/70.27.1610.1023@70.27.1610.1023" timestamp="1583108284348" />
+    <state width="1564" height="266" key="GridCell.Tab.0.left" timestamp="1583108284347">
       <screen x="70" y="27" width="1610" height="1023" />
     </state>
-    <state width="1564" height="266" key="GridCell.Tab.0.right/70.27.1610.1023@70.27.1610.1023" timestamp="1583013910282" />
-    <state x="531" y="366" key="com.intellij.ide.util.TipDialog" timestamp="1583011136219">
+    <state width="1564" height="266" key="GridCell.Tab.0.left/70.27.1610.1023@70.27.1610.1023" timestamp="1583108284347" />
+    <state width="1564" height="266" key="GridCell.Tab.0.right" timestamp="1583108284348">
       <screen x="70" y="27" width="1610" height="1023" />
     </state>
-    <state x="531" y="366" key="com.intellij.ide.util.TipDialog/70.27.1610.1023@70.27.1610.1023" timestamp="1583011136219" />
+    <state width="1564" height="266" key="GridCell.Tab.0.right/70.27.1610.1023@70.27.1610.1023" timestamp="1583108284348" />
+    <state x="358" y="116" width="1024" height="852" key="SettingsEditor" timestamp="1583102103995">
+      <screen x="70" y="27" width="1610" height="1023" />
+    </state>
+    <state x="358" y="116" width="1024" height="852" key="SettingsEditor/70.27.1610.1023@70.27.1610.1023" timestamp="1583102103994" />
+    <state x="531" y="366" key="com.intellij.ide.util.TipDialog" timestamp="1583076596331">
+      <screen x="70" y="27" width="1610" height="1023" />
+    </state>
+    <state x="531" y="366" key="com.intellij.ide.util.TipDialog/70.27.1610.1023@70.27.1610.1023" timestamp="1583076596331" />
+    <state x="517" y="592" width="646" height="215" key="com.intellij.jarRepository.RepositoryAttachDialog-DOWNLOAD" timestamp="1583098818043">
+      <screen x="70" y="27" width="1610" height="1023" />
+    </state>
+    <state x="517" y="592" width="646" height="215" key="com.intellij.jarRepository.RepositoryAttachDialog-DOWNLOAD/70.27.1610.1023@70.27.1610.1023" timestamp="1583098818043" />
+    <state x="528" y="135" width="683" height="813" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1583104300991">
+      <screen x="70" y="27" width="1610" height="1023" />
+    </state>
+    <state x="528" y="135" width="683" height="813" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/70.27.1610.1023@70.27.1610.1023" timestamp="1583104300991" />
+    <state x="538" y="251" width="672" height="678" key="search.everywhere.popup" timestamp="1583100449135">
+      <screen x="70" y="27" width="1610" height="1023" />
+    </state>
+    <state x="538" y="251" width="672" height="678" key="search.everywhere.popup/70.27.1610.1023@70.27.1610.1023" timestamp="1583100449135" />
   </component>
 </project>

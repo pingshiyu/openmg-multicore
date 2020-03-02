@@ -34,22 +34,45 @@ import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 
 import fi.tkk.ics.jbliss.Graph;
 
+// matrix multiplication / linear algebra library
+import org.ejml.simple.SimpleMatrix;
+
+/**
+ * Meat of the program.
+ * Main class for generating all molecules.
+ * Given molecular formula passed in from main function.
+ */
+
 public class MolProcessor implements Runnable{
 	static final int SEM_CAN = 1;
 	static final int MIN_CAN = 2;
 	static final int CAN_AUG = 4;
 	static final int OPTIMAL = SEM_CAN | MIN_CAN;	// currently mix of sem_can + min_can
+	public static final int INFINITY = 99999;
 	final int method;		// can be one of the above choices
 	final boolean checkBad;
 	final boolean hashMap;	// used with semiCan (otherwise, minimality check) for finished molecules
 	final boolean cdkCheck;
     final private IAtomContainerSet goodlistquery;
-    final private IAtomContainerSet badlistquery; 
-    
+    final private IAtomContainerSet badlistquery;
+
+	// all non-hydrogen atoms are stored.
 	public final Atom[] atoms;
 	final int nH;
 	final Graph graph;
-	final int[][] adjacency, fragment, connectivity, loopPart; // loopParticipation = in how many loops it participates 
+
+	// neighbourhood constraint function: neighbourhood[i] gives the max. number of neighbours within distance i.
+	final int[] neighbourhood;
+	final boolean restrictNeighbourhoods;
+
+	// These are all n*n matrices.
+    // adjacency_{ij}: indicates the multiplicity of the bond connecting atom i to atom j. 0 or more.
+    // fragment: the molecule used as the base for generation
+    // connectivity_{ij} indicates how many ways atom i is connected to atom j
+    // loopPart_{ij}: in how many loops edge ij participates
+    // distance_{ij}: the distance from atom i to atom j
+    // final: will always refer to the same array and will stay consistent throughout threads.
+	final int[][] adjacency, fragment, connectivity, loopPart, distance;
 	final static AtomicLong duplicate = new AtomicLong(0);
 	private final IAtomContainer acontainer;
 //	final boolean compatible[][][];
@@ -57,6 +80,7 @@ public class MolProcessor implements Runnable{
 	static boolean frag = false;
 	int []blocks;
 	int maxOpenings;
+    // startLeft / startRight indicates the indices of an atom
 	int startLeft;
 	int startRight;
 	String canString="";
@@ -85,8 +109,8 @@ public class MolProcessor implements Runnable{
 	 * @param adjacency
 	 * @param gr
 	 */
-	public MolProcessor(final Atom[] atoms, final int nH, final int maxOpenings, 
-						final int[][] adjacency, final int[][]fragment, final int[][] connectivity, final int[][] loopPart, 
+	public MolProcessor(final Atom[] atoms, final int nH, final int maxOpenings, final int[] neighbourhood, final boolean restrictNeighbourhoods,
+						final int[][] adjacency, final int[][]fragment, final int[][] connectivity, final int[][] loopPart, final int[][] distance,
 			            final Graph gr, String canStr, final int[] blocks,
 			            final int stL, final int stR, final IAtomContainer acontainer,
 			            final int method, final boolean hm, final boolean cdk, final boolean checkBad, 
@@ -105,8 +129,15 @@ public class MolProcessor implements Runnable{
 //		initCompatible();
 		this.nH = nH;
 		this.maxOpenings = maxOpenings;
-		graph = gr; 
+		graph = gr;
 		this.fragment = fragment;
+		this.restrictNeighbourhoods = restrictNeighbourhoods;
+		if (restrictNeighbourhoods) {
+			this.neighbourhood = new int[neighbourhood.length];
+			System.arraycopy(neighbourhood, 0, this.neighbourhood, 0, neighbourhood.length);
+		} else {
+			this.neighbourhood = null;
+		}
 		this.adjacency    = new int [atoms.length][atoms.length];
 //		if (fragment != null) 
 //			this.fragment = new int [atoms.length][atoms.length];
@@ -114,25 +145,27 @@ public class MolProcessor implements Runnable{
 //			this.fragment = null;
 		this.connectivity = new int [atoms.length][atoms.length];
 		this.loopPart     = new int [atoms.length][atoms.length];
+		this.distance     = new int [atoms.length][atoms.length];
 		for (int i=0; i<atoms.length; i++)
 			for (int j=0; j<atoms.length; j++){
 //				if (fragment != null) this.fragment[i][j] = fragment[i][j];
 				this.adjacency[i][j]    = adjacency[i][j];
 				this.connectivity[i][j] = connectivity[i][j];
 				this.loopPart[i][j]     = loopPart[i][j];
+				this.distance[i][j]     = distance[i][j];
 			}
 		this.startLeft = stL;
 		this.startRight = stR;
 		this.acontainer = acontainer;
 	}
 	
-	public MolProcessor(final ArrayList<String> atomSymbols, String formula,
+	public MolProcessor(final ArrayList<String> atomSymbols, String formula, int[] neighbourhood, boolean restrictNeighbourhoods,
 			final int method, final boolean hm, final boolean cdk, final boolean checkBad, final boolean frag, String goodlist, String badlist) throws CDKException, FileNotFoundException{
 		this.method = method;
 		this.hashMap = hm;
 		this.cdkCheck = cdk;
 		this.checkBad = checkBad;
-		int nH=0;
+		int nH=0; // number of hydrogens
 		int maxOpenings=0;
 		int atomCount=0;
 		for (String symbol:atomSymbols){
@@ -143,20 +176,37 @@ public class MolProcessor implements Runnable{
 		}
 		atoms = new Atom[atomSymbols.size()-nH];
 		this.nH = nH;
+		// populates array with all atoms, except for hydrogens.
 		for (String symbol:atomSymbols){
 			if (symbol.equals("H")) continue;
-			atoms[atomCount] = new Atom(symbol,atomCount);
+			atoms[atomCount] = new Atom(symbol,atomCount); // note: second parameter is not used at all.
 			maxOpenings += atoms[atomCount].maxValence;
 			atomCount++;
 		}
-		adjacency    = new int [atomCount][atomCount];
+
+		// initialise neighbourhood constriant
+		this.restrictNeighbourhoods = restrictNeighbourhoods;
+		if (restrictNeighbourhoods) {
+			this.neighbourhood = new int[neighbourhood.length];
+			System.arraycopy(neighbourhood, 0, this.neighbourhood, 0, neighbourhood.length);
+		} else {
+			this.neighbourhood = null;
+		}
+
+		// initialises adjacency matrix, initially to all 0.
+		adjacency = new int [atomCount][atomCount];
 		if (frag) 
 			this.fragment = new int [atoms.length][atoms.length];
 		else 
 			this.fragment = null;
-		loopPart     = new int [atomCount][atomCount];
+		loopPart = new int [atomCount][atomCount];
+		// Connectivity matrix, initialised to all -1
 		connectivity = new int [atomCount][atomCount];
-		for (int i=0; i<atoms.length; i++) Arrays.fill(connectivity[i], -1);	
+		for (int i=0; i<atoms.length; i++) Arrays.fill(connectivity[i], -1);
+		// Distance matrix, all off diagonal entries and infty, and all diagonal entries are 0 initially.
+		distance = new int [atomCount][atomCount];
+		for (int i=0; i<atoms.length; i++) Arrays.fill(distance[i], INFINITY);
+        for (int i=0; i<atoms.length; i++) distance[i][i] = 0;
 		
 		graph = new Graph(atomCount);
 		this.maxOpenings = maxOpenings;
@@ -176,7 +226,7 @@ public class MolProcessor implements Runnable{
 			do {	// this stupid loop is here only because CDK is not stable with respect to the order of the atoms it returns
 				lcontainer = MolecularFormulaManipulator.getAtomContainer(
 					MolecularFormulaManipulator.getMolecularFormula(formula, DefaultChemObjectBuilder.getInstance()));
-			}while(!inRightOrder(atomSymbols, lcontainer));	// make sure the order is as we want
+			}while(!inRightOrder(atomSymbols, lcontainer));	// make sure the order is as we want. lcontainer is CDK class for atoms
 			acontainer = lcontainer;
 				
 	        if(goodlist != null){
@@ -231,6 +281,13 @@ public class MolProcessor implements Runnable{
 	}
 
 	private String molString(int[] canPerm){
+        /**
+         * Obtains the canonical representation of the molecule.
+         * The canonical representation is the lower triangle of the matrix, read left-to-right
+         * Which gives the molecule's canonical string.
+         * Input:
+         *  canPerm: canonical permutation (labelling) of the atoms / nodes
+         */
 		int[][] adjacency = new int [atoms.length][atoms.length];
 		for (int i=0; i<atoms.length; i++)
 			for (int j=0; j<atoms.length; j++){
@@ -278,17 +335,18 @@ public class MolProcessor implements Runnable{
 		return addUpOpenings (0);
 	}
 
-	private boolean isConnected(){
+	private boolean isConnected() {
+        // connectivity check done by checking whether connected to first atom or not
 		for (int i=1; i<atoms.length; i++) if (connectivity[0][i]==-1) return false;
 		return true;
 	}
 	
-	private boolean[] seen ;
+	private boolean[] seen;
 	private boolean isConnectedDFS(){
 		seen = new boolean[atoms.length];
 		dfs(0);
 		boolean connected = true;
-		for (boolean b:seen) connected &= b;
+		for (boolean b : seen) connected &= b;
 		return connected;
 	}
 	
@@ -328,7 +386,14 @@ public class MolProcessor implements Runnable{
 //		return incBond(left, right);
 //	}
 //	
-	
+
+	/**
+	 * Add / remove bond between `left` and `right`, doing the necessary checks for bad structures as well as
+	 * maintaining the matrics along the way (matrices representing current molecule)
+	 * @param left
+	 * @param right
+	 * @return true / false for whether the bond was incremented / deleted
+	 */
 	private boolean incBond(final int left, final int right) {
 		if ((method & SEM_CAN) != 0 && !(blocks[right]==0 || adjacency[left][right]<adjacency[left][right-1])) return false;
 		if (adjacency[left][right] > 2) return false;	// no more than Triple bonds
@@ -350,12 +415,12 @@ public class MolProcessor implements Runnable{
 		return true;
 	}
 
-	int loopCount = 0, c37=0, ccc=0;
 	/**
-	 * connects left to right, and returns whether this new bond closes a loop.
+	 * connects `left` to `right` atom, and returns whether this new bond closes a loop.
+     * Whilst maintaining the global constants, e.g. matrices for the current molecule
 	 * @param left
 	 * @param right
-	 * @return
+	 * @return true -> bad connection, not connected. false -> was ble to connect
 	 */
 	private boolean connectIfNotBad(int left, int right) {
 		boolean loop = connectivity[left][right] != -1;
@@ -370,15 +435,23 @@ public class MolProcessor implements Runnable{
 		adjacency[left][right]--;
 		adjacency[right][left]--;
 
-		++ccc;
-//		System.out.print(" +"+left+right+"("+(++ccc)+")");
-//		if (ccc == 1000) {
-//			ccc = 0;
-//			test();
-//		}
-//			ccc=ccc+1-1;
+		if (restrictNeighbourhoods) {
+			// Check for distance matrix adherence & update if satisfies constraints
+			int[][] distanceMatrixUpdated = distanceMatrixAddBond(left, right);
+			if (distanceMatrixUpdated != null) {
+				// Distance matrix has been changed with addition of the new bond. We check if it is still compliant with
+				// distance neighbourhood constraints.
+				if (isNeighbourhoodCompliant(distanceMatrixUpdated)) {
+					// compliant: we go ahead with the updated matrix
+					System.arraycopy(distanceMatrixUpdated, 0, this.distance, 0, this.atoms.length);
+				} else {
+					// not compliant: we do not go ahead and indicate this bond should not be added
+					return true;
+				}
+			}
+		}
+
 		if (loop) {
-//			System.out.println(" + loop: "+(++loopCount));
 			// if the nodes are already connected, which means we will now make a loop, we don't mark it here, because 
 			// it makes it easier to open the loop: then we don't need to do anything! We can however detect that here
 			// a loop was made because the two nodes are not directly connected! Note that we remove edges as a result 
@@ -386,8 +459,6 @@ public class MolProcessor implements Runnable{
 			// mark the loop, so we know also later
 			int prev_i = right;
 			for (int i=left; i!=right; prev_i = i, i = connectivity[i][right]){
-//				if (i == -1)
-//					i = -1;
 				loopPart[prev_i][i]++;
 				loopPart[i][prev_i]++;
 			}
@@ -422,6 +493,70 @@ public class MolProcessor implements Runnable{
 			}
 		}
 		return false;
+	}
+
+	/**
+	 * Calculate the distance matrix after adding bond between `left` and `right`. Returning a copy of the matrix.
+	 * If the bond will not change neighbourhood (i.e. only increases multiplicity of edge), return `null`.
+	 * @param left
+	 * @param right
+	 * @return `null` if does not change distance matrix, or a copy of the updated distance matrix otherwise.
+	 */
+	private int[][] distanceMatrixAddBond(int left, int right) {
+		// if we are only increasing bond multiplicity: distance matrix won't change.
+		if (adjacency[left][right] > 0) {
+			return null;
+		}
+		int[][] updatedMatrix = new int[atoms.length][atoms.length];
+		for (int i = 0; i < updatedMatrix.length; i++) {
+			for (int j = 0; j < i; j++) {
+				// upon adding an edge, if the distance were to change, then it must be because of a shorter path
+				// using the newly added edge. The newly added edge is (left, right). Hence the shortest path will be
+				// minimum of all paths that either 1) uses (left, right), or 2) does not use (left, right).
+				updatedMatrix[i][j] = Math.min(distance[i][right] + 1 + distance[left][j],
+						Math.min(distance[i][j], distance[i][left] + 1 + distance[right][j]));
+				updatedMatrix[j][i] = updatedMatrix[i][j];
+			}
+			// distance of i to oneself is 0.
+			updatedMatrix[i][i] = 0;
+		}
+		return updatedMatrix;
+	}
+
+	/**
+	 * Check if the distance matrix is compliant with the local neighbourhood constraint
+	 * Constraint as defined in this.neighbourhood
+	 * @param distanceMatrix
+	 * @return true if is indeed compliant with neighbourhood constraints, false otherwise.
+	 */
+	private boolean isNeighbourhoodCompliant(int[][] distanceMatrix) {
+		// calculate each of the `i`-neighbourhood sizes, and see if any exceeds the `neighbourhood` limit at any point.
+		for (int i = 0; i < this.neighbourhood.length; i++) {
+			int[] iNeighbourhood = kNeighbourhood(distanceMatrix, i);
+			for (int j = 0; j < iNeighbourhood.length; j++) {
+				// check if i-neighbourhood of entry (atom) j exceeds the limitation neighbourhood[i].
+				if (iNeighbourhood[j] > neighbourhood[i]) return false;
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * Calculates the neighbourhood sizes of each molecule within distance k. If k is greater than the number of atoms,
+	 * (more strictly the diameter of the graph), then we will just return up to the atom count.
+	 * @param distanceMatrix
+	 * @param k
+	 * @return int[] of the neighbourhood sizes of each molecule.
+	 */
+	private int[] kNeighbourhood(int[][] distanceMatrix, int k) {
+		int[] neighbourhoodSizes = new int[distanceMatrix.length];
+		for (int i = 0; i < distanceMatrix.length; i++) {
+			// calculate the neighbourhood sizes for each atom.
+			for (int j = 0; j < distanceMatrix.length; j++) {
+				if (distanceMatrix[i][j] <= k) neighbourhoodSizes[i]++;
+			}
+		}
+		return neighbourhoodSizes;
 	}
 
 	private void test() {
@@ -467,7 +602,17 @@ public class MolProcessor implements Runnable{
 		return false;
 	}
 
+    /**
+     * Analogous to connect. Disconnect `left` to `right` atom
+     * Whilst maintaining the global constants, e.g. matrices for the current molecule
+     * @param left
+     * @param right
+     */
 	private void disconnect(int left, int right) {
+		// Update the distance matrix with the `adjacency` matrix, which already the bond (left, right) decremented
+		if (restrictNeighbourhoods)
+			updateDistanceMatrix();
+
 //		++c37;
 		//		System.out.print(" -"+left+right);
 		if (connectivity[left][right] != right) {	// at this point a loop was closed; see connect...() method
@@ -508,6 +653,107 @@ public class MolProcessor implements Runnable{
 				}
 			}
 		}
+	}
+
+	/**
+	 * Update the `distance` matrix according to the `adjacency` matrix currently.
+	 * This is done via Seidel's algorithm: https://en.wikipedia.org/wiki/Seidel%27s_algorithm
+	 */
+	private void updateDistanceMatrix() {
+		int[][] newDistanceMatrix = floydWarshall(Util.adjacencyToWeight(adjacency));
+		System.arraycopy(newDistanceMatrix, 0, distance, 0, atoms.length);
+	}
+
+	/**
+	 * Floyd-Warshall algorithm for all-pairs shortest paths
+	 */
+	private int[][] floydWarshall(int[][] graphWeightArray) {
+		int n = graphWeightArray.length;
+		int dist[][] = new int[n][n];
+		int i, j, k;
+
+		for (i = 0; i < n; i++) {
+			for (j = 0; j < n; j++) {
+				dist[i][j] = graphWeightArray[i][j];
+			}
+		}
+
+		for (k = 0; k < n; k++) {
+			for (i = 0; i < n; i++) {
+				for (j = 0; j < n; j++) {
+					if (dist[i][k] + dist[k][j] < dist[i][j]) {
+						dist[i][j] = dist[i][k] + dist[k][j];
+					}
+				}
+			}
+		}
+		return dist;
+	}
+
+	/**
+	 * Implementation of Seidel's algorithm: APD returns the distance matrix of the graph with adjacency matrix A.
+	 * This will only work on connected graphs.
+	 * @param adjacencyArray adjacency matrix
+	 * @param n dimension of matrix
+	 * @return
+	 */
+	private int[][] apd(int[][] adjacencyArray, int n) {
+		// base case: check if it is the complete graph, in which case return the adjacency matrix itself
+		// (for complete graphs, adjacency matrix is its own distance matrix)
+		boolean isCompleteGraph = true;
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < i; j++) {
+				if (adjacencyArray[i][j] == 0) {
+					// if any off-diagonal entry is 0, then the graph is not the complete graph.
+					isCompleteGraph = false;
+					break;
+				}
+			}
+		}
+		if (isCompleteGraph) {
+			return adjacencyArray;
+		}
+
+		SimpleMatrix A = new SimpleMatrix(Util.intToDouble2DArray(adjacencyArray));
+		SimpleMatrix Z = A.mult(A);
+
+		// Initialised to 0. Note that both A and Z are symmetric:
+		// A is symmetric as it is the adjacency matrix of the graph
+		// Z is symmetric as it is an adjacency matrix raised to a power.
+		// So we only need to loop through off diagonal entries to find where there should be 1's.
+		int[][] BArray = new int[n][n];
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < n; j++) {
+				if ((adjacencyArray[i][j] == 1) || (Z.get(i, j) > 0)) {
+					BArray[i][j] = 1;
+				}
+			}
+		}
+
+		int[][] TArr = apd(BArray, n);
+
+		SimpleMatrix T = new SimpleMatrix(Util.intToDouble2DArray(TArr));
+		SimpleMatrix X = T.mult(A);
+
+		int[] degree = new int[n];
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < n; j++) {
+				degree[i] += adjacencyArray[i][j];
+			}
+		}
+
+		int[][] DArr = new int[n][n];
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < n; j++) {
+				if (X.get(i, j) >= (TArr[i][j] * degree[j])) {
+					DArr[i][j] = 2*TArr[i][j];
+				} else {
+					DArr[i][j] = 2*TArr[i][j] - 1;
+				}
+			}
+		}
+
+		return DArr;
 	}
 
 	private boolean beforeLoop(int left, int right) {
@@ -575,7 +821,8 @@ public class MolProcessor implements Runnable{
 	}
 
 	/**
-	 * @param atom
+	 * @param atom atom number, as an index to the atoms array / adjacency matrix row
+     * Outputs if the atom with index `atom` has free valencies or not.
 	 */
 	private boolean isFull(final int atom) {
 		int bondSum = 0;
@@ -675,6 +922,9 @@ public class MolProcessor implements Runnable{
 //		}
 	}
 
+    /**
+     * Multithreading methods
+     */
 	@Override
 	public void run() {
 		PMG.availThreads.incrementAndGet();
@@ -711,7 +961,7 @@ public class MolProcessor implements Runnable{
 		while (avail>1) {
 			if (PMG.availThreads.compareAndSet(avail, avail-1)) {
 				PMG.pendingTasks.incrementAndGet();
-				PMG.executor.execute(new MolProcessor(atoms, nH, maxOpenings, adjacency, fragment, connectivity, loopPart, graph, canString, blocks, startLeft, startRight, acontainer, method, hashMap, cdkCheck, checkBad, goodlistquery, badlistquery));
+				PMG.executor.execute(new MolProcessor(atoms, nH, maxOpenings, neighbourhood, restrictNeighbourhoods, adjacency, fragment, connectivity, loopPart, distance, graph, canString, blocks, startLeft, startRight, acontainer, method, hashMap, cdkCheck, checkBad, goodlistquery, badlistquery));
 				return;
 			}
 			avail = PMG.availThreads.get();
@@ -720,18 +970,23 @@ public class MolProcessor implements Runnable{
 	}
 	
 	/*
-	 * This function should be called first with left=0 and right=1 as parameters.
+	 * This function should be called first with startLeft=0 and startRight=1 as parameters.
+	 * Input:
+	 *  visited: set of visited graphs nodes (may not necessarily be complete molecules)
+	 *  pString: canonical String of current graph, used with the Bliss library.
 	 */
 	void generateOrderly (Set<String> visited, String pString) {
     	if (visited == null && (method & CAN_AUG)!=0) {
     		visited = new HashSet<String>();
     		pString = canString;
     	}
+
+    	// If the new edge (bond) (startLeft, startRight) cannot be added (due to valency constraints e.g.)
 		if (startRight == atoms.length || isFull(startLeft)) {
 			if (startLeft == atoms.length-2) return;
 			int right = startRight;
 			int [] oldBlocks = null;
-			if ((method & SEM_CAN) != 0) {
+			if ((method & SEM_CAN) != 0) { // if method is semi-canonicity
 				oldBlocks = new int [blocks.length];
 				System.arraycopy(blocks, 0, oldBlocks, 0, blocks.length);
 				updateBlocks(startLeft);
@@ -746,6 +1001,7 @@ public class MolProcessor implements Runnable{
 		}
 		else if (incBond(startLeft, startRight)) {
 			maxOpenings-=2;
+			// molecule final check: output / add to counter if passes
 			if (acceptableStructure(visited, pString)) {
 				checkMolecule();
 				if (maxOpenings>0) submitNewTask();	// if there are still open places for new bonds
@@ -758,6 +1014,13 @@ public class MolProcessor implements Runnable{
 		startRight--;
 	}
 
+    /**
+     * Determines if the structure is canonical, return whether it will be kept or not.
+     * @param visited HashSet of visited molecules. Will only be used when Bliss library is also being used.
+     * @param pString a canonical string of the molecule, as calculated by Bliss.
+     *                Hence this will be only used when canonical augmentation options has been selected,
+     *                as it will make use of the Bliss graph library.
+     */
 	private boolean acceptableStructure(Set<String> visited, String pString) {
 		if ((method&MIN_CAN) != 0) return new SortCompare(startLeft).isMinimal();
 		if ((method&CAN_AUG) != 0) {
@@ -788,9 +1051,10 @@ public class MolProcessor implements Runnable{
 	}
 
 	private void finalProcess(String canString) {
-		if (cdkCheck && !acceptedByCDK()){
+		if (cdkCheck && !acceptedByCDK()) {
 			PMG.rejectedByCDK.incrementAndGet();
-		} else{
+		} else {
+		    // accepted molecule: add to set of molecules to keep
 			if (hashMap || frag) {
 				if (canString == null) canString = molString(graph.canonize(this));
 				if (!molSet.add(canString)) {
@@ -862,6 +1126,10 @@ public class MolProcessor implements Runnable{
 	}
 
 	private void augment(){
+        /**
+         * Perform canonical augmentation on canString.
+         * Hence will only be used when the canonical augmentation option has been set to true.
+         */
 		String pString = canString;
 		if (maxOpenings<=0) return;
     	Set<String> visited = new HashSet<String>();
