@@ -672,11 +672,7 @@ public class MolProcessor implements Runnable{
 		int dist[][] = new int[n][n];
 		int i, j, k;
 
-		for (i = 0; i < n; i++) {
-			for (j = 0; j < n; j++) {
-				dist[i][j] = graphWeightArray[i][j];
-			}
-		}
+		System.arraycopy(graphWeightArray, 0, dist, 0, n);
 
 		for (k = 0; k < n; k++) {
 			for (i = 0; i < n; i++) {
@@ -697,7 +693,7 @@ public class MolProcessor implements Runnable{
 	 * @param n dimension of matrix
 	 * @return
 	 */
-	private int[][] apd(int[][] adjacencyArray, int n) {
+	private int[][] seidel(int[][] adjacencyArray, int n) {
 		// base case: check if it is the complete graph, in which case return the adjacency matrix itself
 		// (for complete graphs, adjacency matrix is its own distance matrix)
 		boolean isCompleteGraph = true;
@@ -730,7 +726,7 @@ public class MolProcessor implements Runnable{
 			}
 		}
 
-		int[][] TArr = apd(BArray, n);
+		int[][] TArr = seidel(BArray, n);
 
 		SimpleMatrix T = new SimpleMatrix(Util.intToDouble2DArray(TArr));
 		SimpleMatrix X = T.mult(A);

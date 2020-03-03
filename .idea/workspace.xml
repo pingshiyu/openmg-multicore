@@ -3,7 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="d373af43-beb6-4a62-8a33-199c3cbaf58c" name="Default Changelist" comment="commented code">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/molecules/C6H6.sdf" beforeDir="false" afterPath="$PROJECT_DIR$/molecules/C6H6.sdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/molecules/C6H6.sdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/omg/MolProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/omg/MolProcessor.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,7 +38,7 @@
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="org.omg.PMG" />
       <module name="openmg-code" />
-      <option name="PROGRAM_PARAMETERS" value="C6H12O7 -neighbourhood 1,5,7 -o ./molecules/C6H12O7_1_5_7.sdf" />
+      <option name="PROGRAM_PARAMETERS" value="C20H42 -neighbourhood 1,5,7 -o ./molecules/C20H42_1_5_7.sdf" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -67,10 +68,10 @@
     <option name="LAST_COMMIT_MESSAGE" value="commented code" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="250" y="197" width="1084" height="784" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1583157259499">
+    <state x="152" y="89" width="1084" height="784" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1583165059571">
       <screen x="70" y="27" width="1610" height="1023" />
     </state>
-    <state x="250" y="197" width="1084" height="784" key="#com.intellij.execution.impl.EditConfigurationsDialog/70.27.1610.1023@70.27.1610.1023" timestamp="1583157259499" />
+    <state x="152" y="89" width="1084" height="784" key="#com.intellij.execution.impl.EditConfigurationsDialog/70.27.1610.1023@70.27.1610.1023" timestamp="1583165059571" />
     <state x="685" y="249" width="424" height="591" key="#com.intellij.ide.macro.MacrosDialog" timestamp="1582682884056">
       <screen x="70" y="27" width="1610" height="1023" />
     </state>
@@ -87,22 +88,22 @@
       <screen x="70" y="27" width="1610" height="1023" />
     </state>
     <state x="658" y="296" width="424" height="491" key="FileChooserDialogImpl/70.27.1610.1023@70.27.1610.1023" timestamp="1583102099001" />
-    <state width="1564" height="266" key="GridCell.Tab.0.bottom" timestamp="1583157267896">
+    <state width="1564" height="266" key="GridCell.Tab.0.bottom" timestamp="1583165064386">
       <screen x="70" y="27" width="1610" height="1023" />
     </state>
-    <state width="1564" height="266" key="GridCell.Tab.0.bottom/70.27.1610.1023@70.27.1610.1023" timestamp="1583157267896" />
-    <state width="1564" height="266" key="GridCell.Tab.0.center" timestamp="1583157267891">
+    <state width="1564" height="266" key="GridCell.Tab.0.bottom/70.27.1610.1023@70.27.1610.1023" timestamp="1583165064386" />
+    <state width="1564" height="266" key="GridCell.Tab.0.center" timestamp="1583165064383">
       <screen x="70" y="27" width="1610" height="1023" />
     </state>
-    <state width="1564" height="266" key="GridCell.Tab.0.center/70.27.1610.1023@70.27.1610.1023" timestamp="1583157267891" />
-    <state width="1564" height="266" key="GridCell.Tab.0.left" timestamp="1583157267890">
+    <state width="1564" height="266" key="GridCell.Tab.0.center/70.27.1610.1023@70.27.1610.1023" timestamp="1583165064383" />
+    <state width="1564" height="266" key="GridCell.Tab.0.left" timestamp="1583165064382">
       <screen x="70" y="27" width="1610" height="1023" />
     </state>
-    <state width="1564" height="266" key="GridCell.Tab.0.left/70.27.1610.1023@70.27.1610.1023" timestamp="1583157267890" />
-    <state width="1564" height="266" key="GridCell.Tab.0.right" timestamp="1583157267895">
+    <state width="1564" height="266" key="GridCell.Tab.0.left/70.27.1610.1023@70.27.1610.1023" timestamp="1583165064382" />
+    <state width="1564" height="266" key="GridCell.Tab.0.right" timestamp="1583165064385">
       <screen x="70" y="27" width="1610" height="1023" />
     </state>
-    <state width="1564" height="266" key="GridCell.Tab.0.right/70.27.1610.1023@70.27.1610.1023" timestamp="1583157267895" />
+    <state width="1564" height="266" key="GridCell.Tab.0.right/70.27.1610.1023@70.27.1610.1023" timestamp="1583165064385" />
     <state x="358" y="116" width="1024" height="852" key="SettingsEditor" timestamp="1583102103995">
       <screen x="70" y="27" width="1610" height="1023" />
     </state>
@@ -119,9 +120,9 @@
       <screen x="70" y="27" width="1610" height="1023" />
     </state>
     <state x="528" y="135" width="683" height="813" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/70.27.1610.1023@70.27.1610.1023" timestamp="1583104300991" />
-    <state x="538" y="251" width="672" height="678" key="search.everywhere.popup" timestamp="1583100449135">
+    <state x="538" y="251" width="672" height="678" key="search.everywhere.popup" timestamp="1583173413646">
       <screen x="70" y="27" width="1610" height="1023" />
     </state>
-    <state x="538" y="251" width="672" height="678" key="search.everywhere.popup/70.27.1610.1023@70.27.1610.1023" timestamp="1583100449135" />
+    <state x="538" y="251" width="672" height="678" key="search.everywhere.popup/70.27.1610.1023@70.27.1610.1023" timestamp="1583173413646" />
   </component>
 </project>
