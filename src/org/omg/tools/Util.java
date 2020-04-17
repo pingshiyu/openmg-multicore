@@ -1,11 +1,10 @@
 package org.omg.tools;
 
 import org.omg.MolProcessor;
+import org.omg.PMG;
+import org.openscience.cdk.tools.SystemOutLoggingTool;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
+import java.util.*;
 
 public class Util {
 	public static ArrayList<String> parseFormula (String formula){
@@ -150,11 +149,155 @@ public class Util {
 					weightArray[i][j] = 1;
 					weightArray[j][i] = 1;
 				} else {
-					weightArray[i][j] = MolProcessor.INFINITY;
-					weightArray[j][i] = MolProcessor.INFINITY;
+					weightArray[i][j] = PMG.INFINITY;
+					weightArray[j][i] = PMG.INFINITY;
 				}
 			}
 		}
 		return weightArray;
+	}
+
+	/**
+	 * Generate all valid molecular formulae under a certain molecular `mass`.
+	 * Taking atoms from `atoms`.
+	 */
+	public static Set<String> formulaeUnder(int mass){
+		// Dynamic programming: compute all solutions under mass `mass`:
+		HashMap<Integer, Set<String>> allSolutions = new HashMap<>();
+
+		// Base case: there are no formulae of mass <= min_weight => emptySet.
+		int minWeight = PMG.INFINITY;
+		for (char atom : Atom.atoms) {
+			if (Atom.atomWeights.get(atom) < minWeight)
+				minWeight = Atom.atomWeights.get(atom);
+		}
+		for (int m = 0; m < minWeight; m++) {
+			HashSet<String> noFormulaSet = new HashSet<String>();
+			noFormulaSet.add("");
+			allSolutions.put(m, noFormulaSet);
+		}
+
+		/*
+		Form the larger set by equation:
+		L(w) = U_{w_i <= w} ( {S u {a_i} : S \in L(w - w_i)} u L(w - w_i) )
+		 */
+		for (int x = minWeight; x <= mass; x++) {
+			HashSet<String> solutionsOfX = new HashSet<String>();
+
+			// Higher weight solution also includes all lower weight solutions
+			// We only need to add in the solutions of the highest weight subproblem.
+			solutionsOfX.addAll(allSolutions.get(x - minWeight));
+
+			// Also includes all possibilities of adding new atoms, as long as they are of weight <= x
+			for (char atom : Atom.atoms) {
+				int atomWeight = Atom.atomWeights.get(atom);
+
+				// add all suitable atoms to the formulae
+				if (atomWeight <= x) {
+					// And contains all possibilities of adding the extra atom.
+					for(String formula : allSolutions.get(x - atomWeight)) {
+						solutionsOfX.add(addAtomToFormula(formula, atom));
+					}
+				}
+			}
+			allSolutions.put(x, solutionsOfX);
+		}
+
+		// The candidate solutions may not be valid graphs: we need to make sure the degree sequence sum is even,
+		// hence legal.
+		Set<String> candidateSolutions = allSolutions.get(mass);
+		Set<String> finalSolutions = new HashSet<String>();
+		for (String formula : candidateSolutions) {
+			if (legal(formula))
+				finalSolutions.add(toShortFormula(formula));
+		}
+
+		return finalSolutions;
+	}
+
+	/**
+	 * Add an atom to a candidate chemical formulae (list out all of the atoms one by one, sorted by
+	 * alphabetical order: e.g. CH4 is written as CHHHH.)
+	 * @return `formulae` with `atom` added into it
+	 */
+	private static String addAtomToFormula(String formula, char atom) {
+		for (int i = 0; i < formula.length(); i++) {
+			if (formula.charAt(i) >= atom) {
+				return formula.substring(0, i) + atom + formula.substring(i);
+			}
+		}
+		return formula + atom;
+	}
+
+	/**
+	 * Determine if the formula corresponds a valid molecular graph.
+	 * The condition checked is: whether the sum of all degrees (valencies) are even.
+	 * @param formula, candidate formula (expanded unary version)
+	 * @return boolean, whether the formula corresponds to a valid degree sequence
+	 */
+	private static boolean legal(String formula) {
+		int n = formula.length();
+		// No single atom molecule.
+		if (n <= 1)
+			return false;
+
+		boolean even = true;
+		int nonHDegreeSum = 0;
+		int nH = 0;
+		for (int i = 0; i < n; i ++) {
+			char atom = formula.charAt(i);
+			// odd valencies => flip evenness
+			if (atom == 'H' || atom == 'N' || atom == 'P')
+				even = !even;
+
+			// Count free valencies & leaves (H) counts.
+			if (atom == 'H')
+				nH++;
+			else
+				nonHDegreeSum += Atom.valenceTable.get("" + atom).get(0);
+		}
+
+		// Check for evenness. Graph cannot be legal if sum of degrees is odd.
+		if (!even)
+			return false;
+
+		// Hn for n > 2 is illegal.
+		if (nH > 2 && nH == n)
+			return false;
+
+		// Check for connectedness: in a graph of not just hydrogens, we cannot have more hydrogens than free valencies.
+		// Most free valencies we can have is Sum_{A =/= H} n_A - 2*(n - n_H)
+		// So need: n_H <= Sum_{A =/= H} val(A)*n_A - 2*(n - n_H)
+		int nonH = n - nH;
+		int maxFreeValencies = nonHDegreeSum - 2*(nonH - 1);
+		if (nH > maxFreeValencies)
+			return false;
+
+		// all tests passed
+		return true;
+	}
+
+	/**
+	 * Convert a long formula (unary) into short form formula.
+	 * e.g. CHHHH -> CH4
+	 * @return short form formula String
+	 */
+	private static String toShortFormula(String formula) {
+		// Store in a multiset (as a map)
+		Map<Character, Integer> atomsCount = new HashMap<>();
+		int n = formula.length();
+		for (int i = 0; i < n; i++) {
+			char atom = formula.charAt(i);
+			int count = atomsCount.containsKey(atom) ? atomsCount.get(atom) : 0;
+			atomsCount.put(atom, ++count);
+		}
+
+		// Convert the map into a string.
+		String shortFormula = "";
+		for (Character atom : atomsCount.keySet()) {
+			shortFormula += (atomsCount.get(atom) == 1) ? "" + atom : "" + atom + atomsCount.get(atom);
+		}
+
+		return shortFormula;
 	}
 }

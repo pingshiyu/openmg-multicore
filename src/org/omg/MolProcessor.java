@@ -47,8 +47,7 @@ public class MolProcessor implements Runnable{
 	static final int SEM_CAN = 1;
 	static final int MIN_CAN = 2;
 	static final int CAN_AUG = 4;
-	static final int OPTIMAL = SEM_CAN | MIN_CAN;	// currently mix of sem_can + min_can
-	public static final int INFINITY = 99999;
+	static final int OPTIMAL = SEM_CAN | MIN_CAN;	// currently mix of sem_can + min_can;
 	final int method;		// can be one of the above choices
 	final boolean checkBad;
 	final boolean hashMap;	// used with semiCan (otherwise, minimality check) for finished molecules
@@ -205,7 +204,7 @@ public class MolProcessor implements Runnable{
 		for (int i=0; i<atoms.length; i++) Arrays.fill(connectivity[i], -1);
 		// Distance matrix, all off diagonal entries and infty, and all diagonal entries are 0 initially.
 		distance = new int [atomCount][atomCount];
-		for (int i=0; i<atoms.length; i++) Arrays.fill(distance[i], INFINITY);
+		for (int i=0; i<atoms.length; i++) Arrays.fill(distance[i], PMG.INFINITY);
         for (int i=0; i<atoms.length; i++) distance[i][i] = 0;
 		
 		graph = new Graph(atomCount);
@@ -821,6 +820,7 @@ public class MolProcessor implements Runnable{
      * Outputs if the atom with index `atom` has free valencies or not.
 	 */
 	private boolean isFull(final int atom) {
+		if (atoms.length <= 1) return true; // temp fix: ignoring single non-H atom molecules for now.
 		int bondSum = 0;
 		for (int i=0;i<atoms.length;i++)
 			bondSum += adjacency[atom][i];
@@ -902,7 +902,7 @@ public class MolProcessor implements Runnable{
 
 	private void outputMatrix(PrintStream out, int[][] fragment) {
 		StringWriter writer = new StringWriter();
-		writer.write(PMG.formula+"\n");
+		writer.write(PMG.currentFormula+"\n");
 		writer.write("-----------"+(PMG.molCounter.get()-duplicate.get())+"\n");
 		for (int i=0; i<atoms.length; i++) {
 			for (int j=0; j<atoms.length; j++){
@@ -979,10 +979,12 @@ public class MolProcessor implements Runnable{
 
     	// If the new edge (bond) (startLeft, startRight) cannot be added (due to valency constraints e.g.)
 		if (startRight == atoms.length || isFull(startLeft)) {
+			//System.out.println("startRight " + startRight + "; startLeft " + startLeft);
+			if (atoms.length <= 1) return; // temp fix: case of single non-H atom in molecule.
 			if (startLeft == atoms.length-2) return;
 			int right = startRight;
 			int [] oldBlocks = null;
-			if ((method & SEM_CAN) != 0) { // if method is semi-canonicity
+			if ((method & SEM_CAN) != 0) {
 				oldBlocks = new int [blocks.length];
 				System.arraycopy(blocks, 0, oldBlocks, 0, blocks.length);
 				updateBlocks(startLeft);
@@ -994,8 +996,7 @@ public class MolProcessor implements Runnable{
 			startLeft-=1;
 			startRight=right;
 			return;
-		}
-		else if (incBond(startLeft, startRight)) {
+		} else if (incBond(startLeft, startRight)) {
 			maxOpenings-=2;
 			// molecule final check: output / add to counter if passes
 			if (acceptableStructure(visited, pString)) {
@@ -1043,7 +1044,7 @@ public class MolProcessor implements Runnable{
 			} else {
 				finalProcess(null);
 			}
-		}	
+		}
 	}
 
 	private void finalProcess(String canString) {

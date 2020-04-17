@@ -2,10 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d373af43-beb6-4a62-8a33-199c3cbaf58c" name="Default Changelist" comment="commented code">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/molecules/C6H6.sdf" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/org/omg/MolProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/omg/MolProcessor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/omg/PMG.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/omg/PMG.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/omg/tools/Atom.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/omg/tools/Atom.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/omg/tools/Util.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/omg/tools/Util.java" afterDir="false" />
     </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -27,18 +31,31 @@
     <property name="Repository.Attach.JavaDocs" value="false" />
     <property name="Repository.Attach.Sources" value="false" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/lib/ejml-v0.38-libs" />
-    <property name="project.structure.last.edited" value="Modules" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/.project" />
+    <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
   </component>
   <component name="RunManager">
     <configuration name="PMG" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="ALTERNATIVE_JRE_PATH" value="11" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="org.omg.PMG" />
       <module name="openmg-code" />
-      <option name="PROGRAM_PARAMETERS" value="C20H42 -neighbourhood 1,5,7 -o ./molecules/C20H42_1_5_7.sdf" />
+      <option name="PROGRAM_PARAMETERS" value="C8H8 -p 7 -wt 110 -o ./molecules/chemspace_110.sdf" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -62,6 +79,19 @@
       <updated>1582676255341</updated>
     </task>
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="commented code" />

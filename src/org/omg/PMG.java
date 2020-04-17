@@ -3,8 +3,7 @@ package org.omg;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -19,6 +18,8 @@ import org.openscience.cdk.exception.CDKException;
 import fi.tkk.ics.jbliss.Graph;
 
 public class PMG{
+	public static final int INFINITY = 99999;
+
 	/**Output File containing the list of graph. */
 	static BufferedWriter outFile;
 	static AtomicInteger availThreads;
@@ -29,9 +30,13 @@ public class PMG{
 	final static LinkedBlockingQueue<Runnable> taskQueue = new LinkedBlockingQueue<Runnable>();
 	static ThreadPoolExecutor executor;
 	static ExecutorService fileWriterExecutor;
-	static int executorCount=0;
+	static int executorCount = 0;
 	static boolean wFile = false;
-	static String formula = null;
+	// Generate isomers of formula in the set. Set will be singleton if we are not generating a chemical space.
+	static boolean chemicalSpace = false;
+	static Set<String> formulae = new HashSet<>();
+	static int formulaeCounter = 0;
+	static String currentFormula = null;
 	static int[] neighbourhood = null;
 	static boolean restrictNeighbourhoods = false;
 	static int method = MolProcessor.OPTIMAL;
@@ -50,29 +55,49 @@ public class PMG{
 			System.exit(0);
 		}
 		String out = parseArguments(args);
-		if (executorCount < 1) executorCount = Runtime.getRuntime().availableProcessors();	// default: use all cores available
+
+		startupMessages();
+
+		long before = System.currentTimeMillis();
 
 		if (wFile) {
 			outFile = new BufferedWriter(new FileWriter(out));
 			fileWriterExecutor = Executors.newSingleThreadExecutor();	// use an independent thread to write to file
 		}
-		availThreads = new AtomicInteger(executorCount-1);	// number of tasks waiting in the queue; or, to generate in parallel
-		startupMessages();
-		
-		long before = System.currentTimeMillis();
-		ArrayList<String> atomSymbols = Util.parseFormula(formula);
-		if (atomSymbols == null) System.exit(1);	// exit if it failed to parse the formula
-		if (restrictNeighbourhoods)
-        	System.out.println("Neighbourhood restriction defined as: " + Arrays.toString(neighbourhood));
-		mp = new MolProcessor(atomSymbols, formula, neighbourhood, restrictNeighbourhoods, method, (method==MolProcessor.SEM_CAN) && hashMap, cdk, checkBad, fragFile != null, goodlist, badlist);
-		if (fragFile != null) mp.useFragment(fragFile);
-		executor = new ThreadPoolExecutor(executorCount, executorCount, 0L, TimeUnit.MILLISECONDS, taskQueue);
-		pendingTasks.getAndIncrement();
-		executor.execute(mp);	// start the generation
-		wait2Finish();			// wait for all tasks to finish (pendingTasks == 0), and close the output file 
-		executor.shutdown();	// stop the executor --> kill the threads
-		long after = System.currentTimeMillis();		
 
+		for (String formula : formulae) {
+			if (executorCount < 1) executorCount = Runtime.getRuntime().availableProcessors();	// default: use all cores available
+			availThreads = new AtomicInteger(executorCount-1);	// number of tasks waiting in the queue; or, to generate in parallel
+
+			formulaeCounter++;
+			currentFormula = formula;
+
+			// Parse atomic formula, exit if failed to parse.
+			ArrayList<String> atomSymbols = Util.parseFormula(currentFormula);
+			if (atomSymbols == null) System.exit(1);
+			mp = new MolProcessor(atomSymbols, formula, neighbourhood, restrictNeighbourhoods, method, (method==MolProcessor.SEM_CAN) && hashMap, cdk, checkBad, fragFile != null, goodlist, badlist);
+			if (fragFile != null) mp.useFragment(fragFile);
+			executor = new ThreadPoolExecutor(executorCount, executorCount, 0L, TimeUnit.MILLISECONDS, taskQueue);
+			pendingTasks.getAndIncrement();
+			executor.execute(mp);	// start the generation
+			wait2Finish();			// wait for all tasks to finish (pendingTasks == 0)
+			executor.shutdown();	// stop the executor --> kill the threads
+		}
+
+		try { // close the output file
+			if (wFile) {
+				fileWriterExecutor.shutdown();
+				while (!fileWriterExecutor.awaitTermination(60, TimeUnit.SECONDS));
+				outFile.close();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			System.err.println("Failed while waiting for file outputs to complete.");
+			e.printStackTrace();
+		}
+
+		long after = System.currentTimeMillis();
 		// Report the number of generated molecules
 		report(after - before);
 	}
@@ -81,8 +106,10 @@ public class PMG{
 		int i=0;
 		String out=null;
 		boolean warned = false;
-		try{
-			formula = args[0];
+		try {
+			// Add molecular formula (First argument)
+			formulae.add(args[0]); currentFormula = args[0];
+
 			for(i = 1; i < args.length; i++){
 				if(args[i].equals("-p")){
 					executorCount = Integer.parseInt(args[++i]);
@@ -98,6 +125,14 @@ public class PMG{
 				}
 				else if(args[i].equals("-hashmap")){
 					hashMap = true;
+				}
+				else if(args[i].equals("-wt") || args[i].equals("-weight")) {
+					// If weightLimit option has been chosen, then we override the formula with the set of formulas.
+					chemicalSpace = true;
+					int weightLimit = Integer.parseInt(args[++i]);
+					formulae = Util.formulaeUnder(weightLimit);
+					System.out.println("Generating all molecules under weight " + weightLimit + ". " +
+							"Overriding inputted formula.");
 				}
 				else if(args[i].equals("-nocdk")){
 					cdk = false;
@@ -191,19 +226,25 @@ public class PMG{
 	}
 
 	private static void startupMessages() {
-		System.out.print("Processing "+formula+" using");
-		switch(method){
-		case MolProcessor.CAN_AUG: System.out.println(" canonical augmentation with bliss as canonizer");
-//		if (checkBad) {
-//			checkBad = false;
-//			System.out.println("Warning: Bad-sub filter cannot be used with canonical augmentation - filter disabled.");
-//		}
-		break;
-		case MolProcessor.MIN_CAN: System.out.println(" only minimization"); break;
-		case MolProcessor.SEM_CAN: System.out.println(" semi-canonization and "+(hashMap?"hash map":"minimization test on finished molecules")); break;
-		case MolProcessor.OPTIMAL: System.out.println(" semi-canonization and minimization test on every generated structure"); break;
+		if (!chemicalSpace) {
+			System.out.print("Processing " + currentFormula + " using");
+			switch (method) {
+				case MolProcessor.CAN_AUG:
+					System.out.println(" canonical augmentation with bliss as canonizer");
+					break;
+				case MolProcessor.MIN_CAN:
+					System.out.println(" only minimization");
+					break;
+				case MolProcessor.SEM_CAN:
+					System.out.println(" semi-canonization and " + (hashMap ? "hash map" : "minimization test on finished molecules"));
+					break;
+				case MolProcessor.OPTIMAL:
+					System.out.println(" semi-canonization and minimization test on every generated structure");
+					break;
+			}
 		}
 		System.out.print("Selected options: ");
+		if (restrictNeighbourhoods) System.out.print("neighbourhood restriction " + Arrays.toString(neighbourhood) + ", ");
 		if (cdk) System.out.print("cdk"+(goodlist==null?"":" with good-list")+(badlist==null?"":(goodlist==null?" with":" and")+" bad-list")+", ");
 		if (checkBad) System.out.print("bad-sub filter, ");
 		if (wFile) System.out.print("with output to file, ");
@@ -212,7 +253,11 @@ public class PMG{
 	}
 
 	private static void report(long duration) {
-		System.out.println("\rFinal molecule count:  " + molCounter.get());
+		if (chemicalSpace)
+			System.out.println("\r" + formulaeCounter + " formulae has been enumerated. Total molecules: " + molCounter.get());
+		else
+			System.out.println("\rFinal molecule count:  " + molCounter.get());
+
 		if (verbose) {
 			if (method == MolProcessor.SEM_CAN || mp.frag) System.out.println("Duplicates removed in the end: "+MolProcessor.duplicate.get());
 			if (cdk) System.out.println("Rejecting "+rejectedByCDK.get()+" by CDK.");
@@ -222,32 +267,24 @@ public class PMG{
 	}
 
 	private static void wait2Finish() {
-		int timer = 100;
+		int waitTime = 5;
+		int timer = waitTime;
 		while (0 < pendingTasks.get()){
 			try {
-				Thread.sleep(100);
+				Thread.sleep(waitTime);
 				if (timer > 0)
 					timer--;
 				else {
-					System.out.print("\rMolecules so far: "+molCounter.get());
-					timer = 100;
+					if (chemicalSpace)
+						System.out.print("\rFormula #" + formulaeCounter + ": " + currentFormula + ", " +
+							"molecules thus far: " + molCounter.get());
+					else
+						System.out.print("\rTotal molecules thus far: " + molCounter.get());
+					timer = waitTime;
 				}
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-		}
-		
-		try {
-			if (wFile) { 
-				fileWriterExecutor.shutdown(); 
-				while (!fileWriterExecutor.awaitTermination(60, TimeUnit.SECONDS));
-				outFile.close(); 
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			System.err.println("Failed while waiting for file outputs to complete.");
-			e.printStackTrace();
 		}
 	}
 

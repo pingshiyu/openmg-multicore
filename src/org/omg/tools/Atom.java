@@ -1,12 +1,11 @@
 package org.omg.tools;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class Atom {
-	static HashMap<String,  List<Integer>> valenceTable;
+	static final HashMap<String,  List<Integer>> valenceTable;
+	static final HashMap<Character, Integer> atomWeights;
+	static final Set<Character> atoms;
 	public final String symbol;
 	public final int maxValence;
 	public final List<Integer> valenceList;
@@ -32,6 +31,26 @@ public class Atom {
 		valenceTable.put("O", Arrays.asList(2));
 		valenceTable.put("S", Arrays.asList(6,4,2));
 		valenceTable.put("P", Arrays.asList(5,3));
+	}
+
+	static {
+		atomWeights = new HashMap<Character, Integer>();
+		atomWeights.put('C', 12);
+		atomWeights.put('H', 1);
+		atomWeights.put('N', 14);
+		atomWeights.put('O', 16);
+		atomWeights.put('P', 31);
+		atomWeights.put('S', 32);
+	}
+
+	static {
+		atoms = new HashSet<Character>();
+		atoms.add('C');
+		atoms.add('H');
+		atoms.add('N');
+		atoms.add('O');
+		atoms.add('P');
+		atoms.add('S');
 	}
 
 }
