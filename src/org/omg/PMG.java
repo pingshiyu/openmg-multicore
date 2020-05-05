@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.omg.tools.Atom;
 import org.omg.tools.Util;
 import org.openscience.cdk.exception.CDKException;
 
@@ -35,7 +36,9 @@ public class PMG{
 	// Generate isomers of formula in the set. Set will be singleton if we are not generating a chemical space.
 	static boolean chemicalSpace = false;
 	static Set<String> formulae = new HashSet<>();
+	static int weightLimit = 50;
 	static int formulaeCounter = 0;
+	static List<Character> chemSpaceAtoms = new ArrayList<>(Atom.atoms);
 	static String currentFormula = null;
 	static int[] neighbourhood = null;
 	static boolean restrictNeighbourhoods = false;
@@ -49,7 +52,7 @@ public class PMG{
     private static String fragFile = null;
     private static MolProcessor mp;
     
-	public static void main(String[] args) throws IOException, CDKException{
+	public static void main(String[] args) throws IOException, CDKException {
 		if (args.length == 0) {
 			usage();
 			System.exit(0);
@@ -126,11 +129,19 @@ public class PMG{
 				else if(args[i].equals("-hashmap")){
 					hashMap = true;
 				}
+				else if(args[i].equals("-chemspaceatoms")) {
+					// If this has been set, then -wt / -weight must also be set.
+					chemicalSpace = true;
+					String atomsString = args[++i];
+					Character[] atoms =
+							atomsString.chars().mapToObj(c -> (char)c).toArray(Character[]::new);
+					chemSpaceAtoms = Arrays.asList(atoms);
+				}
 				else if(args[i].equals("-wt") || args[i].equals("-weight")) {
 					// If weightLimit option has been chosen, then we override the formula with the set of formulas.
 					chemicalSpace = true;
-					int weightLimit = Integer.parseInt(args[++i]);
-					formulae = Util.formulaeUnder(weightLimit);
+					weightLimit = Integer.parseInt(args[++i]);
+					formulae = Util.formulaeUnder(weightLimit, chemSpaceAtoms);
 					System.out.println("Generating all molecules under weight " + weightLimit + ". " +
 							"Overriding inputted formula.");
 				}

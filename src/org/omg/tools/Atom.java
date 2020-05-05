@@ -1,11 +1,12 @@
 package org.omg.tools;
 
 import java.util.*;
+import java.util.prefs.AbstractPreferences;
 
 public class Atom {
-	static final HashMap<String,  List<Integer>> valenceTable;
-	static final HashMap<Character, Integer> atomWeights;
-	static final Set<Character> atoms;
+	public static final HashMap<String,  List<Integer>> valenceTable;
+	public static final HashMap<Character, Integer> atomWeights;
+	public static final Set<Character> atoms;
 	public final String symbol;
 	public final int maxValence;
 	public final List<Integer> valenceList;

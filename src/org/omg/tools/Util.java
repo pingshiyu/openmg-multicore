@@ -158,75 +158,130 @@ public class Util {
 	}
 
 	/**
-	 * Generate all valid molecular formulae under a certain molecular `mass`.
-	 * Taking atoms from `atoms`.
+	 * Split a string by individual capital letters (representing atoms):
+	 * 	for a formula this would break the formula into components;
+	 * @param atomsString a string with capital letters
+	 * @return `atomsString` split according to capital letters
 	 */
-	public static Set<String> formulaeUnder(int mass){
-		// Dynamic programming: compute all solutions under mass `mass`:
-		HashMap<Integer, Set<String>> allSolutions = new HashMap<>();
-
-		// Base case: there are no formulae of mass <= min_weight => emptySet.
-		int minWeight = PMG.INFINITY;
-		for (char atom : Atom.atoms) {
-			if (Atom.atomWeights.get(atom) < minWeight)
-				minWeight = Atom.atomWeights.get(atom);
-		}
-		for (int m = 0; m < minWeight; m++) {
-			HashSet<String> noFormulaSet = new HashSet<String>();
-			noFormulaSet.add("");
-			allSolutions.put(m, noFormulaSet);
-		}
-
-		/*
-		Form the larger set by equation:
-		L(w) = U_{w_i <= w} ( {S u {a_i} : S \in L(w - w_i)} u L(w - w_i) )
-		 */
-		for (int x = minWeight; x <= mass; x++) {
-			HashSet<String> solutionsOfX = new HashSet<String>();
-
-			// Higher weight solution also includes all lower weight solutions
-			// We only need to add in the solutions of the highest weight subproblem.
-			solutionsOfX.addAll(allSolutions.get(x - minWeight));
-
-			// Also includes all possibilities of adding new atoms, as long as they are of weight <= x
-			for (char atom : Atom.atoms) {
-				int atomWeight = Atom.atomWeights.get(atom);
-
-				// add all suitable atoms to the formulae
-				if (atomWeight <= x) {
-					// And contains all possibilities of adding the extra atom.
-					for(String formula : allSolutions.get(x - atomWeight)) {
-						solutionsOfX.add(addAtomToFormula(formula, atom));
-					}
-				}
-			}
-			allSolutions.put(x, solutionsOfX);
-		}
-
-		// The candidate solutions may not be valid graphs: we need to make sure the degree sequence sum is even,
-		// hence legal.
-		Set<String> candidateSolutions = allSolutions.get(mass);
-		Set<String> finalSolutions = new HashSet<String>();
-		for (String formula : candidateSolutions) {
-			if (legal(formula))
-				finalSolutions.add(toShortFormula(formula));
-		}
-
-		return finalSolutions;
+	public static String[] splitIntoComponents(String atomsString) {
+		return atomsString.split("(?=\\p{Upper})");
 	}
 
 	/**
-	 * Add an atom to a candidate chemical formulae (list out all of the atoms one by one, sorted by
-	 * alphabetical order: e.g. CH4 is written as CHHHH.)
+	 * Generating all valid molecular formulae under a certain `mass`, and using
+	 * atoms from `atoms`.
+ 	 * @param mass maximum mass limit
+	 * @param atoms set of atoms to comprise molecular with
+	 * @return Set of formulae, under `mass` using `atoms`.
+	 */
+	public static Set<String> formulaeUnder(int mass, List<Character> atoms) {
+		atoms.sort((a1, a2) -> {
+			if (a1 == a2) return 0;
+			else return Atom.atomWeights.get(a1) < Atom.atomWeights.get(a2) ? 1 : -1;
+		});
+		Set<String> formulae = new HashSet<>();
+		traverseFormulaeTree(formulae, mass, atoms, "");
+		return formulae;
+	}
+
+	private static void traverseFormulaeTree(Set<String> formulae, int mass, List<Character> atoms, String formula) {
+		// Save current formula if legal.
+		if (legal(formula)) {
+			formulae.add(formula);
+		}
+
+		// No atoms available to use: tree ends
+		if (atoms.isEmpty()) {
+			return;
+		}
+
+		Character atom = atoms.get(0);
+		// Pruning for hydrogen: when we are at Hydrogens, and we do not have free valencies.
+		// We can terminate the tree here, since Hydrogens are the last atoms being added.
+		if (atom == 'H' && !freeValencyCheck(formula))
+			return;
+
+		int atomWeight = Atom.atomWeights.get(atom);
+
+		// Two choices: do we want `atom` in our formula, or not?
+		// If we don't: (left subtree) then traverse with `atom` removed.
+		List<Character> newAtoms = new ArrayList<>(atoms);
+		newAtoms.remove(0);
+		traverseFormulaeTree(formulae, mass, newAtoms, formula);
+
+		// If we do (and can): then continue traversing the tree, updating the mass used
+		if (atomWeight > mass) {
+			return; // cannot include new atom: weight too low - tree ends here.
+		}
+		String childFormula = addAtomToFormula(formula, atom);
+		traverseFormulaeTree(formulae, mass - atomWeight, atoms, childFormula);
+	}
+
+	/**
+	 * Add an atom to a candidate chemical formulae (So adding 'H' to 'CH4' gives 'CH5')
 	 * @return `formulae` with `atom` added into it
 	 */
 	private static String addAtomToFormula(String formula, char atom) {
-		for (int i = 0; i < formula.length(); i++) {
-			if (formula.charAt(i) >= atom) {
-				return formula.substring(0, i) + atom + formula.substring(i);
+		if (formula.isEmpty()) return formula + atom;
+
+		// Separate into components by regex
+		String[] components = splitIntoComponents(formula);
+
+		// If the atom already exists in the formula: this would find it
+		for (int i = 0; i < components.length; i++) {
+			if (components[i].charAt(0) == atom) {
+				if (components[i].length() == 1) {
+					// Single atom: we add 1 to it
+					components[i] = atom + "2";
+				} else {
+					// Not single atom: we increment the counter
+					int numberOfAtoms = Integer.parseInt(components[i].substring(1)) + 1;
+					components[i] = atom + "" + numberOfAtoms;
+				}
+				return String.join("", components);
 			}
 		}
+		// If the atom does not exist in the formula:
 		return formula + atom;
+	}
+
+	private static boolean freeValencyCheck(String formula) {
+		if (formula.length() == 0)
+			return false;
+
+		int nonHDegreeSum = 0;
+		int nH = 0;
+		int n = 0;
+		String[] components = splitIntoComponents(formula);
+		// Read the components of the formula, and compute the degrees
+		for (String component : components) {
+			char atom = component.charAt(0);
+			int nA;
+			if (component.length() == 1) {
+				nA = 1;
+			} else {
+				nA = Integer.parseInt(component.substring(1));
+			}
+			n += nA;
+
+			int valency = Atom.valenceTable.get("" + atom).get(0);
+			if (atom == 'H') {
+				nH = nA;
+			} else {
+				nonHDegreeSum += valency * nA;
+			}
+		}
+
+		// We cannot have more hydrogens than free valencies.
+		// Most free valencies we can have is Sum_{A =/= H} n_A - 2*(n - n_H)
+		// So need: n_H <= Sum_{A =/= H} val(A)*n_A - 2*(n - n_H)
+		int nonH = n - nH;
+		int maxFreeValencies = nonHDegreeSum - 2*(nonH - 1);
+		if (nH > maxFreeValencies)
+			return false;
+
+		// all tests passed
+		return true;
 	}
 
 	/**
@@ -236,36 +291,37 @@ public class Util {
 	 * @return boolean, whether the formula corresponds to a valid degree sequence
 	 */
 	private static boolean legal(String formula) {
-		int n = formula.length();
-		// No single atom molecule.
-		if (n <= 1)
+		if (formula.length() <= 1)
 			return false;
 
-		boolean even = true;
 		int nonHDegreeSum = 0;
 		int nH = 0;
-		for (int i = 0; i < n; i ++) {
-			char atom = formula.charAt(i);
-			// odd valencies => flip evenness
-			if (atom == 'H' || atom == 'N' || atom == 'P')
-				even = !even;
+		int n = 0;
+		String[] components = formula.split("(?=\\p{Upper})");
+		// Read the components of the formula, and compute the degrees
+		for (String component : components) {
+			char atom = component.charAt(0);
+			int nA;
+			if (component.length() == 1) {
+				nA = 1;
+			} else {
+				nA = Integer.parseInt(component.substring(1));
+			}
+			n += nA;
 
-			// Count free valencies & leaves (H) counts.
-			if (atom == 'H')
-				nH++;
-			else
-				nonHDegreeSum += Atom.valenceTable.get("" + atom).get(0);
+			int valency = Atom.valenceTable.get("" + atom).get(0);
+			if (atom == 'H') {
+				nH = nA;
+			} else {
+				nonHDegreeSum += valency * nA;
+			}
 		}
 
 		// Check for evenness. Graph cannot be legal if sum of degrees is odd.
-		if (!even)
+		if ((nonHDegreeSum + nH) % 2 != 0)
 			return false;
 
-		// Hn for n > 2 is illegal.
-		if (nH > 2 && nH == n)
-			return false;
-
-		// Check for connectedness: in a graph of not just hydrogens, we cannot have more hydrogens than free valencies.
+		// We cannot have more hydrogens than free valencies.
 		// Most free valencies we can have is Sum_{A =/= H} n_A - 2*(n - n_H)
 		// So need: n_H <= Sum_{A =/= H} val(A)*n_A - 2*(n - n_H)
 		int nonH = n - nH;

@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d373af43-beb6-4a62-8a33-199c3cbaf58c" name="Default Changelist" comment="commented code">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/omg/MolProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/omg/MolProcessor.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/org/omg/PMG.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/omg/PMG.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/org/omg/tools/Atom.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/omg/tools/Atom.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/org/omg/tools/Util.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/omg/tools/Util.java" afterDir="false" />
@@ -55,7 +53,7 @@
       <option name="ALTERNATIVE_JRE_PATH" value="11" />
       <option name="MAIN_CLASS_NAME" value="org.omg.PMG" />
       <module name="openmg-code" />
-      <option name="PROGRAM_PARAMETERS" value="C8H8 -p 7 -wt 110 -o ./molecules/chemspace_110.sdf" />
+      <option name="PROGRAM_PARAMETERS" value="HC11N -p 7 -neighbourhood 1,5,7 -chemspaceatoms CHONSP -wt 110" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
