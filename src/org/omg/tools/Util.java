@@ -285,12 +285,89 @@ public class Util {
 	}
 
 	/**
+	 * Check, using the Chungphaisan-Erdos-Gallai algorithm for multigraphical degree sequence
+	 * Let `d_i` be the degree of the ith vertex, in decreasing order. (d_1 >= d_2 ... >= d_n)
+	 * b be the maximal edge multiplicity;
+	 * H_i be the sum of d_1 + ... + d_i
+	 * w_i be the Erdos-Gallai-like weights for multigraphs: for i \in 1, ..., n-1
+	 * 	w_i = 0 if d_1 < b*i
+	 * 	w_i = k such that k is the largest with d_k >= b*i
+	 *
+	 * The degree sequence is multi-graphical with maximum degree b if and only if:
+	 * 	1. sum of degrees is even
+	 * 	2. H_i <= b * i * (y_i - 1) + H[n] - H[y_i], where y_i = max(i, w_i)
+	 *
+	 * @param d degree sequence in decreasing order
+	 * @param b the maximal edge multiplicity
+	 * @return boolean, whether the degree sequence is multi-graphical
+	 */
+	private static boolean legalMultigraph(int[] d, int b) {
+		int n = d.length;
+		int[] H = new int[n+1];
+		H[0] = 0;
+		for (int i = 1; i <= n; i++) {
+			H[i] = H[i-1] + d[i-1];
+		}
+
+		// check sum of degrees is even
+		if (H[n] % 2 == 1) {
+			return false;
+		}
+
+		int w = n;
+		for (int i = 1; i <= n-1; i++) {
+			// Compute w_i (taking advantage of w_i being strictly decreasing
+			while(w > 1 && d[w-1] < b*i)
+				w--;
+
+			int y = Math.max(i, w);
+
+			if (H[i] > (b*i*(y - 1) + H[n] - H[y]))
+				return false;
+		}
+		return true;
+	}
+
+	private static boolean legal(String formula) {
+		if (formula.length() == 0)
+			return false;
+		int[] degreeSequence = toDescendingDegreeSequence(formula);
+		return legalMultigraph(degreeSequence, degreeSequence[0]);
+	}
+
+	/**
+	 * Convert the formula into a degree sequence, in decreasing order
+	 * @param formula chemical formula
+	 * @return degree sequence, in descending order
+	 */
+	private static int[] toDescendingDegreeSequence(String formula) {
+		String[] components = splitIntoComponents(formula);
+		List<Integer> degrees = new ArrayList<>();
+		for (String component : components) {
+			String atom = "" + component.charAt(0);
+			int nA = 1;
+			if (component.length() > 1) {
+				nA = Integer.parseInt(component.substring(1));
+			}
+
+			List<Integer> valencies = Atom.valenceTable.get(atom);
+			Integer valency = valencies.get(valencies.size() - 1);
+			List<Integer> atomDegrees = Collections.nCopies(nA, valency);
+			degrees.addAll(atomDegrees);
+		}
+
+		Collections.sort(degrees, Collections.reverseOrder());
+		return degrees.stream().mapToInt(i->i).toArray();
+	}
+
+	/**
 	 * Determine if the formula corresponds a valid molecular graph.
 	 * The condition checked is: whether the sum of all degrees (valencies) are even.
 	 * @param formula, candidate formula (expanded unary version)
 	 * @return boolean, whether the formula corresponds to a valid degree sequence
 	 */
-	private static boolean legal(String formula) {
+	/**
+	private static boolean legal_(String formula) {
 		if (formula.length() <= 1)
 			return false;
 
@@ -332,6 +409,7 @@ public class Util {
 		// all tests passed
 		return true;
 	}
+	 **/
 
 	/**
 	 * Convert a long formula (unary) into short form formula.
