@@ -367,7 +367,7 @@ public class Util {
 	 * @return boolean, whether the formula corresponds to a valid degree sequence
 	 */
 	/**
-	private static boolean legal_(String formula) {
+	private static boolean legal(String formula) {
 		if (formula.length() <= 1)
 			return false;
 

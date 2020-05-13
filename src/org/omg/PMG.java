@@ -142,7 +142,7 @@ public class PMG{
 					chemicalSpace = true;
 					weightLimit = Integer.parseInt(args[++i]);
 					formulae = Util.formulaeUnder(weightLimit, chemSpaceAtoms);
-					System.out.println("Generating all molecules under weight " + weightLimit + ". " +
+					System.out.println("Generating " + chemSpaceAtoms.toString() + " molecules under weight " + weightLimit + ". " +
 							"Overriding inputted formula.");
 				}
 				else if(args[i].equals("-nocdk")){
