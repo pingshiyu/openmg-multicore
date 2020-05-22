@@ -1,305 +1,0 @@
-Generating [S, P, O, N, C, H] molecules under weight 110. Overriding inputted formula.
-Selected options: neighbourhood restriction [1, 6, 8], cdk, 7 threads.
-Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
-For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
-1463 formulae has been enumerated. Total molecules: 2045290
-Duration: 39219 milliseconds
-Generating [S, P, O, N, C, H] molecules under weight 115. Overriding inputted formula.
-Selected options: neighbourhood restriction [1, 6, 8], cdk, 7 threads.
-Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
-For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
-1759 formulae has been enumerated. Total molecules: 4378712
-Duration: 86320 milliseconds
-Generating [S, P, O, N, C, H] molecules under weight 120. Overriding inputted formula.
-Selected options: neighbourhood restriction [1, 6, 8], cdk, 7 threads.
-Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
-For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
-2118 formulae has been enumerated. Total molecules: 9376071
-Duration: 214619 milliseconds
-Generating [S, P, O, N, C, H] molecules under weight 130. Overriding inputted formula.
-Selected options: neighbourhood restriction [1, 6, 8], cdk, 7 threads.
-Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
-For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
-3012 formulae has been enumerated. Total molecules: 51812644
-Duration: 1340221 milliseconds
-Generating [S, P, O, N, C, H] molecules under weight 110. Overriding inputted formula.
-Selected options: neighbourhood restriction [1, 6, 8], cdk, 7 threads.
-Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
-For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
-1463 formulae has been enumerated. Total molecules: 2045290
-Duration: 37494 milliseconds
-Generating [S, P, O, N, C, H] molecules under weight 115. Overriding inputted formula.
-Selected options: neighbourhood restriction [1, 6, 8], cdk, 7 threads.
-Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
-For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
-1759 formulae has been enumerated. Total molecules: 4378712
-Duration: 80966 milliseconds
-Generating [S, P, O, N, C, H] molecules under weight 120. Overriding inputted formula.
-Selected options: neighbourhood restriction [1, 6, 8], cdk, 7 threads.
-Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
-For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
-2118 formulae has been enumerated. Total molecules: 9376071
-Duration: 207792 milliseconds
-Generating [S, P, O, N, C, H] molecules under weight 110. Overriding inputted formula.
-Selected options: neighbourhood restriction [1, 6, 7], cdk, 7 threads.
-Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
-For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
-1463 formulae has been enumerated. Total molecules: 1204069
-Duration: 28279 milliseconds
-Generating [S, P, O, N, C, H] molecules under weight 115. Overriding inputted formula.
-Selected options: neighbourhood restriction [1, 6, 7], cdk, 7 threads.
-Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
-For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
-1759 formulae has been enumerated. Total molecules: 2762739
-Duration: 62074 milliseconds
-Generating [S, P, O, N, C, H] molecules under weight 120. Overriding inputted formula.
-Selected options: neighbourhood restriction [1, 6, 7], cdk, 7 threads.
-Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
-For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
-2118 formulae has been enumerated. Total molecules: 5052898
-Duration: 137071 milliseconds
-Generating [S, P, O, N, C, H] molecules under weight 130. Overriding inputted formula.
-Selected options: neighbourhood restriction [1, 6, 7], cdk, 7 threads.
-Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
-For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
-3012 formulae has been enumerated. Total molecules: 21509165
-Duration: 684186 milliseconds
-Generating [S, P, O, N, C, H] molecules under weight 110. Overriding inputted formula.
-Selected options: neighbourhood restriction [1, 6, 6], cdk, 7 threads.
-Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
-For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
-1463 formulae has been enumerated. Total molecules: 453832
-Duration: 18998 milliseconds
-Generating [S, P, O, N, C, H] molecules under weight 115. Overriding inputted formula.
-Selected options: neighbourhood restriction [1, 6, 6], cdk, 7 threads.
-Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
-For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
-1759 formulae has been enumerated. Total molecules: 853143
-Duration: 33925 milliseconds
-Generating [S, P, O, N, C, H] molecules under weight 120. Overriding inputted formula.
-Selected options: neighbourhood restriction [1, 6, 6], cdk, 7 threads.
-Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
-For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
-2118 formulae has been enumerated. Total molecules: 1547475
-Duration: 67858 milliseconds
-Generating [S, P, O, N, C, H] molecules under weight 130. Overriding inputted formula.
-Selected options: neighbourhood restriction [1, 6, 6], cdk, 7 threads.
-Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
-For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
-3012 formulae has been enumerated. Total molecules: 5375793
-Duration: 304526 milliseconds
-Generating [S, P, O, N, C, H] molecules under weight 135. Overriding inputted formula.
-Selected options: neighbourhood restriction [1, 6, 6], cdk, 7 threads.
-Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
-For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
-3527 formulae has been enumerated. Total molecules: 9709182
-Duration: 701980 milliseconds
-Generating [O, N, C, H] molecules under weight 110. Overriding inputted formula.
-Selected options: cdk, 7 threads.
-Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
-For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
-579 formulae has been enumerated. Total molecules: 1734708
-Duration: 24162 milliseconds
-Generating [O, N, C, H] molecules under weight 115. Overriding inputted formula.
-Selected options: cdk, 7 threads.
-Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
-For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
-662 formulae has been enumerated. Total molecules: 3766039
-Duration: 54689 milliseconds
-Generating [O, N, C, H] molecules under weight 120. Overriding inputted formula.
-Selected options: cdk, 7 threads.
-Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
-For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
-771 formulae has been enumerated. Total molecules: 10556086
-Duration: 156239 milliseconds
-Generating [O, N, C, H] molecules under weight 130. Overriding inputted formula.
-Selected options: cdk, 7 threads.
-Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
-For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
-992 formulae has been enumerated. Total molecules: 66032113
-Duration: 1231455 milliseconds
-Generating [O, N, C, H] molecules under weight 110. Overriding inputted formula.
-Selected options: neighbourhood restriction [1, 5, 8], cdk, 7 threads.
-Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
-For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
-579 formulae has been enumerated. Total molecules: 1726607
-Duration: 27951 milliseconds
-Generating [O, N, C, H] molecules under weight 115. Overriding inputted formula.
-Selected options: neighbourhood restriction [1, 5, 8], cdk, 7 threads.
-Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
-For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
-662 formulae has been enumerated. Total molecules: 3323721
-Duration: 62008 milliseconds
-Generating [O, N, C, H] molecules under weight 120. Overriding inputted formula.
-Selected options: neighbourhood restriction [1, 5, 8], cdk, 7 threads.
-Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
-For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
-771 formulae has been enumerated. Total molecules: 7081089
-Duration: 153929 milliseconds
-Generating [O, N, C, H] molecules under weight 130. Overriding inputted formula.
-Selected options: neighbourhood restriction [1, 5, 8], cdk, 7 threads.
-Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
-For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
-992 formulae has been enumerated. Total molecules: 32603246
-Duration: 903538 milliseconds
-Generating [O, N, C, H] molecules under weight 110. Overriding inputted formula.
-Selected options: neighbourhood restriction [1, 5, 7], cdk, 7 threads.
-Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
-For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
-579 formulae has been enumerated. Total molecules: 885386
-Duration: 19715 milliseconds
-Generating [O, N, C, H] molecules under weight 115. Overriding inputted formula.
-Selected options: neighbourhood restriction [1, 5, 7], cdk, 7 threads.
-Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
-For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
-662 formulae has been enumerated. Total molecules: 1707748
-Duration: 38808 milliseconds
-Generating [O, N, C, H] molecules under weight 120. Overriding inputted formula.
-Selected options: neighbourhood restriction [1, 5, 7], cdk, 7 threads.
-Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
-For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
-771 formulae has been enumerated. Total molecules: 2997917
-Duration: 89372 milliseconds
-Generating [O, N, C, H] molecules under weight 130. Overriding inputted formula.
-Selected options: neighbourhood restriction [1, 5, 7], cdk, 7 threads.
-Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
-For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
-992 formulae has been enumerated. Total molecules: 12815341
-Duration: 467886 milliseconds
-Generating [O, N, C, H] molecules under weight 135. Overriding inputted formula.
-Selected options: neighbourhood restriction [1, 5, 7], cdk, 7 threads.
-Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
-For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
-1126 formulae has been enumerated. Total molecules: 25644151
-Duration: 1115327 milliseconds
-Generating [O, N, C, H] molecules under weight 140. Overriding inputted formula.
-Selected options: neighbourhood restriction [1, 5, 7], cdk, 7 threads.
-Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
-For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
-1277 formulae has been enumerated. Total molecules: 57878488
-Duration: 2809472 milliseconds
-Generating [O, N, C, H] molecules under weight 110. Overriding inputted formula.
-Selected options: neighbourhood restriction [1, 5, 6], cdk, 7 threads.
-Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
-For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
-579 formulae has been enumerated. Total molecules: 262428
-Duration: 11168 milliseconds
-Generating [O, N, C, H] molecules under weight 115. Overriding inputted formula.
-Selected options: neighbourhood restriction [1, 5, 6], cdk, 7 threads.
-Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
-For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
-662 formulae has been enumerated. Total molecules: 508596
-Duration: 21393 milliseconds
-Generating [O, N, C, H] molecules under weight 120. Overriding inputted formula.
-Selected options: neighbourhood restriction [1, 5, 6], cdk, 7 threads.
-Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
-For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
-771 formulae has been enumerated. Total molecules: 830293
-Duration: 43486 milliseconds
-Generating [O, N, C, H] molecules under weight 130. Overriding inputted formula.
-Selected options: neighbourhood restriction [1, 5, 6], cdk, 7 threads.
-Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
-For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
-992 formulae has been enumerated. Total molecules: 3176334
-Duration: 193420 milliseconds
-Generating [O, N, C, H] molecules under weight 135. Overriding inputted formula.
-Selected options: neighbourhood restriction [1, 5, 6], cdk, 7 threads.
-Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
-For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
-1126 formulae has been enumerated. Total molecules: 5605609
-Duration: 442539 milliseconds
-Generating [O, N, C, H] molecules under weight 140. Overriding inputted formula.
-Selected options: neighbourhood restriction [1, 5, 6], cdk, 7 threads.
-Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
-For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
-1277 formulae has been enumerated. Total molecules: 11692354
-Duration: 1065556 milliseconds
-Processing C14H14 using semi-canonization and minimization test on every generated structure
-Selected options: neighbourhood restriction [1, 5, 6], cdk, 7 threads.
-Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
-For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
-Final molecule count:  367088
-Duration: 134260 milliseconds
-Processing C14H14 using semi-canonization and minimization test on every generated structure
-Selected options: neighbourhood restriction [1, 5, 7], cdk, 7 threads.
-Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
-For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
-Final molecule count:  8368680
-Duration: 732402 milliseconds
-Processing C12H12 using semi-canonization and minimization test on every generated structure
-Selected options: neighbourhood restriction [1, 5, 6], cdk, 7 threads.
-Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
-For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
-Final molecule count:  43749
-Duration: 8389 milliseconds
-Processing C12H12 using semi-canonization and minimization test on every generated structure
-Selected options: neighbourhood restriction [1, 5, 7], cdk, 7 threads.
-Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
-For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
-Final molecule count:  525840
-Duration: 27658 milliseconds
-Processing C12H12 using semi-canonization and minimization test on every generated structure
-Selected options: neighbourhood restriction [1, 5, 8], cdk, 7 threads.
-Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
-For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
-Final molecule count:  2691304
-Duration: 81734 milliseconds
-Processing C10H10 using semi-canonization and minimization test on every generated structure
-Selected options: neighbourhood restriction [1, 5, 6], cdk, 7 threads.
-Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
-For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
-Final molecule count:  5121
-Duration: 1008 milliseconds
-Processing C10H10 using semi-canonization and minimization test on every generated structure
-Selected options: neighbourhood restriction [1, 5, 7], cdk, 7 threads.
-Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
-For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
-Final molecule count:  33109
-Duration: 1874 milliseconds
-Processing C10H10 using semi-canonization and minimization test on every generated structure
-Selected options: neighbourhood restriction [1, 5, 8], cdk, 7 threads.
-Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
-For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
-Final molecule count:  122065
-Duration: 3296 milliseconds
-Processing C8H8 using semi-canonization and minimization test on every generated structure
-Selected options: neighbourhood restriction [1, 5, 6], cdk, 7 threads.
-Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
-For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
-Final molecule count:  578
-Duration: 346 milliseconds
-Processing C8H8 using semi-canonization and minimization test on every generated structure
-Selected options: neighbourhood restriction [1, 5, 7], cdk, 7 threads.
-Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
-For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
-Final molecule count:  2719
-Duration: 442 milliseconds
-Processing C8H8 using semi-canonization and minimization test on every generated structure
-Selected options: neighbourhood restriction [1, 5, 8], cdk, 7 threads.
-Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
-For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
-Final molecule count:  7437
-Duration: 572 milliseconds
-Processing C6H6 using semi-canonization and minimization test on every generated structure
-Selected options: neighbourhood restriction [1, 5, 6], cdk, 7 threads.
-Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
-For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
-Final molecule count:  217
-Duration: 266 milliseconds
-Processing C6H6 using semi-canonization and minimization test on every generated structure
-Selected options: neighbourhood restriction [1, 5, 7], cdk, 7 threads.
-Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
-For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
-Final molecule count:  217
-Duration: 262 milliseconds
-Processing C6H6 using semi-canonization and minimization test on every generated structure
-Selected options: neighbourhood restriction [1, 5, 8], cdk, 7 threads.
-Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
-For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
-Final molecule count:  217
-Duration: 265 milliseconds
-Generating [S, P, O, N, C, H] molecules under weight 110. Overriding inputted formula.
-Selected options: neighbourhood restriction [1, 6, 8], cdk, 7 threads.
-Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
-For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
-Formula #1: SOC3H12, molecules thus far: 0Formula #1: SOC3H12, molecules thus far: 0Formula #1: SOC3H12, molecules thus far: 0Formula #1: SOC3H12, molecules thus far: 0Formula #1: SOC3H12, molecules thus far: 0Formula #5: O2N3CH3, molecules thus far: 375Formula #18: SN3C2H9, molecules thus far: 1784Formula #22: SN3C2H5, molecules thus far: 2846Formula #22: SN3C2H5, molecules thus far: 4011Formula #22: SN3C2H5, molecules thus far: 4868Formula #23: C8H8, molecules thus far: 8097Formula #23: C8H8, molecules thus far: 10745
