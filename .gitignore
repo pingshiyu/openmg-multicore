@@ -1,2 +1,7 @@
 bin/
 molecules/
+enumerate_chemspaces.bat
+enumeration_output.txt
+cnhn-enumeration.bat
+cnhn_output.txt
+Results
