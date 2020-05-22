@@ -28,7 +28,7 @@ public class Atom {
 		// TODO: read atom symbols from CDK?
 		valenceTable.put("H", Arrays.asList(1));
 		valenceTable.put("C", Arrays.asList(4));
-		valenceTable.put("N", Arrays.asList(3));	// Remember to put the biggest number first!?: Not including 5 for now.
+		valenceTable.put("N", Arrays.asList(5,3));	// Remember to put the biggest number first!?
 		valenceTable.put("O", Arrays.asList(2));
 		valenceTable.put("S", Arrays.asList(6,4,2));
 		valenceTable.put("P", Arrays.asList(5,3));

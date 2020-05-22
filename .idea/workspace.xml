@@ -53,7 +53,7 @@
       <option name="ALTERNATIVE_JRE_PATH" value="11" />
       <option name="MAIN_CLASS_NAME" value="org.omg.PMG" />
       <module name="openmg-code" />
-      <option name="PROGRAM_PARAMETERS" value="C6H6 -p 7 -wt 110 -o ./molecules/chemspace_110.sdf" />
+      <option name="PROGRAM_PARAMETERS" value="C6H6 -p 7 -chemspaceatoms CNOPS -wt 120 " />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>

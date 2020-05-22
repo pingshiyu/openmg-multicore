@@ -434,4 +434,78 @@ public class Util {
 
 		return shortFormula;
 	}
+
+	/**
+	 * Computes the crowding bounds automatically based on the H-ratio of the formula
+	 * @param formula molecular formula
+	 * @param d distance to compute bounds up to
+	 * @param aggressive use of aggressive bounds
+	 * @return neighbourhoods restriction based on h-ratios
+	 */
+	public static int[] formulaHRatioCrowdingBounds(String formula, int d, boolean aggressive) {
+		double hratio = formulaHRatio(formula);
+		return hRatioBounds(hratio, d, aggressive);
+	}
+
+	/**
+	 * Generates the crowding bounds based on the hydrogen ratio. Bounds goes up to
+	 * `d`=3 and has the choice of aggression / no aggression
+	 * @param hratio hydrogen ratio of the formula
+	 * @param aggressive aggression, leading to different set of bounds
+	 * @return
+	 */
+	private static int[] hRatioBounds(double hratio, int d, boolean aggressive) {
+		double[] ratios = {0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 1.0};
+
+		// define the boundaries based on aggression, for d=2 and d=3
+		int[][] points;
+		if (aggressive) {
+			points = new int[][] {{7, 8},  {9, 13},  {12, 17}, {14, 21}, {15, 24}, {15, 24}, {14, 20}, {9, 11},  {9, 11}};
+		} else {
+			points = new int[][] {{9, 13}, {11, 17}, {13, 20}, {15, 24}, {15, 26}, {15, 26}, {14, 22}, {12, 12}, {12, 12}};
+		}
+
+		// crowding bounds
+		int[] bounds = new int[d+1];
+		if (d < 2) return new int[] {1, 6};
+		bounds[0] = 1; bounds[1] = 6; // max. valency 6
+
+		for (int i = 0; i < ratios.length-1; i++) {
+			double ratio_lb = ratios[i]; double ratio_ub = ratios[i+1];
+
+			if ((ratio_lb <= hratio) & (hratio <= ratio_ub)) {
+				// assigns values according by interpolation
+				for (int k = 2; k <= d; k++) {
+					int crowding_lb = points[i][k-2];
+					int crowding_ub = points[i+1][k-2];
+					bounds[k] = (int) Math.floor(crowding_lb + (hratio-ratio_lb)/(ratio_ub-ratio_lb) * (crowding_ub-crowding_lb));
+				}
+				return bounds;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Compute the H-ratio in a formula
+	 * @param formula a string representing a molecular formula
+	 * @return double, the h-ratio
+	 */
+	private static double formulaHRatio(String formula) {
+		String[] components = splitIntoComponents(formula);
+		int nh = 0;
+		int n = 0;
+		for (String component : components) {
+			char atom = component.charAt(0);
+
+			int na;
+			if (component.length() == 1) na = 1;
+			else na = Integer.parseInt(component.substring(1));
+
+			if (atom == 'H') nh += na;
+			n += na;
+		}
+
+		return ((double) nh) / n;
+	}
 }

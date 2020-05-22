@@ -42,6 +42,7 @@ public class PMG{
 	static String currentFormula = null;
 	static int[] neighbourhood = null;
 	static boolean restrictNeighbourhoods = false;
+	static boolean automaticCrowdingBound = false;
 	static int method = MolProcessor.OPTIMAL;
 	static boolean hashMap = false;
 	static boolean cdk = true;
@@ -74,6 +75,10 @@ public class PMG{
 
 			formulaeCounter++;
 			currentFormula = formula;
+			if (automaticCrowdingBound) {
+				neighbourhood = Util.formulaHRatioCrowdingBounds(formula, 3, true);
+				//System.out.println("Bound used: " + Arrays.toString(neighbourhood));
+			}
 
 			// Parse atomic formula, exit if failed to parse.
 			ArrayList<String> atomSymbols = Util.parseFormula(currentFormula);
@@ -159,11 +164,14 @@ public class PMG{
 				    // Expected string: comma separated list of integers representing data for the neighbourhood constraint
                     // function. neighbourhood[i] == max. no of neighbours within distance i. neighbourhood[0] = 1.
 				    String neighbourhoodStr = args[++i];
-				    String[] neighbourhoodValues = neighbourhoodStr.split(",");
-				    neighbourhood = new int[neighbourhoodValues.length];
-				    for(int j = 0; j<neighbourhoodValues.length; j++) {
-				        neighbourhood[j] = Integer.parseInt(neighbourhoodValues[j]);
-                    }
+				    if (neighbourhoodStr.startsWith("auto")) {
+				    	automaticCrowdingBound = true;
+					} else {
+						String[] neighbourhoodValues = neighbourhoodStr.split(",");
+						neighbourhood = new int[neighbourhoodValues.length];
+						for (int j = 0; j < neighbourhoodValues.length; j++)
+							neighbourhood[j] = Integer.parseInt(neighbourhoodValues[j]);
+					}
 				    restrictNeighbourhoods = true;
                 }
 				else if(args[i].equals("-v")){

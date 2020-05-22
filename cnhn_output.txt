@@ -1,0 +1,147 @@
+Processing C2H2 using semi-canonization and minimization test on every generated structure
+Selected options: neighbourhood restriction [1, 5, 6], cdk, 7 threads.
+Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
+For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
+Final molecule count:  1
+Duration: 161 milliseconds
+----------------------------------------
+Processing C2H2 using semi-canonization and minimization test on every generated structure
+Selected options: neighbourhood restriction [1, 5, 7], cdk, 7 threads.
+Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
+For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
+Final molecule count:  1
+Duration: 176 milliseconds
+----------------------------------------
+Processing C2H2 using semi-canonization and minimization test on every generated structure
+Selected options: neighbourhood restriction [1, 5, 8], cdk, 7 threads.
+Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
+For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
+Final molecule count:  1
+Duration: 164 milliseconds
+----------------------------------------
+Processing C4H4 using semi-canonization and minimization test on every generated structure
+Selected options: neighbourhood restriction [1, 5, 6], cdk, 7 threads.
+Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
+For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
+Final molecule count:  11
+Duration: 236 milliseconds
+----------------------------------------
+Processing C4H4 using semi-canonization and minimization test on every generated structure
+Selected options: neighbourhood restriction [1, 5, 7], cdk, 7 threads.
+Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
+For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
+Final molecule count:  11
+Duration: 233 milliseconds
+----------------------------------------
+Processing C4H4 using semi-canonization and minimization test on every generated structure
+Selected options: neighbourhood restriction [1, 5, 8], cdk, 7 threads.
+Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
+For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
+Final molecule count:  11
+Duration: 222 milliseconds
+----------------------------------------
+Processing C6H6 using semi-canonization and minimization test on every generated structure
+Selected options: neighbourhood restriction [1, 5, 6], cdk, 7 threads.
+Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
+For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
+Final molecule count:  217
+Duration: 283 milliseconds
+----------------------------------------
+Processing C6H6 using semi-canonization and minimization test on every generated structure
+Selected options: neighbourhood restriction [1, 5, 7], cdk, 7 threads.
+Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
+For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
+Final molecule count:  217
+Duration: 290 milliseconds
+----------------------------------------
+Processing C6H6 using semi-canonization and minimization test on every generated structure
+Selected options: neighbourhood restriction [1, 5, 8], cdk, 7 threads.
+Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
+For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
+Final molecule count:  217
+Duration: 274 milliseconds
+----------------------------------------
+Processing C8H8 using semi-canonization and minimization test on every generated structure
+Selected options: neighbourhood restriction [1, 5, 6], cdk, 7 threads.
+Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
+For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
+Final molecule count:  578
+Duration: 343 milliseconds
+----------------------------------------
+Processing C8H8 using semi-canonization and minimization test on every generated structure
+Selected options: neighbourhood restriction [1, 5, 7], cdk, 7 threads.
+Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
+For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
+Final molecule count:  2719
+Duration: 461 milliseconds
+----------------------------------------
+Processing C8H8 using semi-canonization and minimization test on every generated structure
+Selected options: neighbourhood restriction [1, 5, 8], cdk, 7 threads.
+Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
+For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
+Final molecule count:  7437
+Duration: 552 milliseconds
+----------------------------------------
+Processing C10H10 using semi-canonization and minimization test on every generated structure
+Selected options: neighbourhood restriction [1, 5, 6], cdk, 7 threads.
+Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
+For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
+Final molecule count:  5121
+Duration: 1009 milliseconds
+----------------------------------------
+Processing C10H10 using semi-canonization and minimization test on every generated structure
+Selected options: neighbourhood restriction [1, 5, 7], cdk, 7 threads.
+Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
+For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
+Final molecule count:  33109
+Duration: 1962 milliseconds
+----------------------------------------
+Processing C10H10 using semi-canonization and minimization test on every generated structure
+Selected options: neighbourhood restriction [1, 5, 8], cdk, 7 threads.
+Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
+For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
+Final molecule count:  122065
+Duration: 3291 milliseconds
+----------------------------------------
+Processing C12H12 using semi-canonization and minimization test on every generated structure
+Selected options: neighbourhood restriction [1, 5, 6], cdk, 7 threads.
+Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
+For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
+Final molecule count:  43749
+Duration: 8556 milliseconds
+----------------------------------------
+Processing C12H12 using semi-canonization and minimization test on every generated structure
+Selected options: neighbourhood restriction [1, 5, 7], cdk, 7 threads.
+Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
+For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
+Final molecule count:  525840
+Duration: 28693 milliseconds
+----------------------------------------
+Processing C12H12 using semi-canonization and minimization test on every generated structure
+Selected options: neighbourhood restriction [1, 5, 8], cdk, 7 threads.
+Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
+For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
+Final molecule count:  2691304
+Duration: 92079 milliseconds
+----------------------------------------
+Processing C14H14 using semi-canonization and minimization test on every generated structure
+Selected options: neighbourhood restriction [1, 5, 6], cdk, 7 threads.
+Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
+For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
+Final molecule count:  367088
+Duration: 138691 milliseconds
+----------------------------------------
+Processing C14H14 using semi-canonization and minimization test on every generated structure
+Selected options: neighbourhood restriction [1, 5, 7], cdk, 7 threads.
+Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
+For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
+Final molecule count:  8368680
+Duration: 732197 milliseconds
+----------------------------------------
+Processing C14H14 using semi-canonization and minimization test on every generated structure
+Selected options: neighbourhood restriction [1, 5, 8], cdk, 7 threads.
+Prescribed fragments and canonical augmentation are disabled because bliss is not available on your platform.
+For these features to be available, you need Java 1.6.0_41, Java 1.7 or later (under windows use 'Java x86 32bits').
+Final molecule count:  67065999
+Duration: 3176205 milliseconds
+----------------------------------------
